@@ -8,24 +8,28 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
-app.get('/', (req, res) => {
-  res.send("Hello world");
-});
-
 app.listen(PORT, () => {
   console.log('Listening on port 8080!');
 });
 
+// Routes
+
+app.get('/', (req, res) => {
+  res.send("Hello world");
+});
+
+app.get('/urls', (req, res) => {
+  const templateVars = { urls: urlDatabase };
+  res.render("urls_index", templateVars);
+})
+
+// Providing an API which allows the url list to be fetched via JSON
 app.get('/urls.json', (req, res) => {
   res.json(urlDatabase);
 });
 
-app.get('/hello.html', (req, res) => {
+app.get('/hello-world.html', (req, res) => {
   res.send('<html><head><title>Hello world</title></head><body>Hello world</body></html>');
-})
-
-app.get('/about', (req, res) => {
-  res.render('/about.ejs');
 })
 
 app.get('/testing.html', (req, res) => {
@@ -42,11 +46,12 @@ app.get('/testing.html', (req, res) => {
   res.render('index.ejs');
 })
 
-app.get("/set", (req, res) => {
-  const a = 1;
-  res.send(`a = ${a}`);
-});
+// Example code showing what happens when you call variables out of scope
+// app.get("/set", (req, res) => {
+//   const a = 1;
+//   res.send(`a = ${a}`);
+// });
 
-app.get("/fetch", (req, res) => {
-  res.send(`a = ${a}`);
-});
+// app.get("/fetch", (req, res) => {
+//   res.send(`a = ${a}`);
+// });

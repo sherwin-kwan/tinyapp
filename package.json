@@ -2,10 +2,10 @@
   "name": "tinyapp",
   "version": "1.0.0",
   "description": "URL shortener",
-  "main": "index.js",
+  "main": "express-server.js",
   "scripts": {
     "test": "mocha",
-    "start": "nodemon index.js",
+    "start": "nodemon express-server.js",
     "ejslint": "ejslint views/index.ejs"
   },
   "repository": {
