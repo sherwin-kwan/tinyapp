@@ -43,7 +43,8 @@ router.get('/url/:shortURL', (req, res) => {
 
 // Actually redirect
 router.get('/u/:shortURL', (req, res) => {
-  
+  res.redirect(urlDatabase[req.params.shortURL]); 
+  // Note: This only works if the http:// protocol is specified, otherwise it thinks it's a local file called google.ca!
 })
 
 // Providing an API which allows the url list to be fetched via JSON
