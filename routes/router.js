@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 // Import the database of URLs
 const urlDatabase = require('../urlDatabase.js');
+// Import functions for POST requests
+const functions = require('../helperFunctions.js');
 
 /// HOMEPAGE ///
 
@@ -9,25 +11,34 @@ router.get('/', (req, res) => {
   res.send("Hello world");
 });
 
+// CREATE new URLs
+router.get('/urls/new', (req, res) => {
+  res.render("urls_new");
+})
+router.post('/urls', postNewUrl);
+// READ URLs
 router.get('/urls', (req, res) => {
   const templateVars = { urls: urlDatabase };
   res.render("urls_index", templateVars);
 })
 
-router.get('/urls/new', (req, res) => {
-  res.render("urls_new");
-})
-// Providing an API which allows the url list to be fetched via JSON
-router.get('/urls.json', (req, res) => {
-  res.json(urlDatabase);
-});
-
+// SEE DETAIL for a single URL
 router.get('/url/:shortURL', (req, res) => {
   const templateVars = {shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
   res.render('../views/urls_detail.ejs', templateVars);
 })
 
-// TEST PAGES
+// UPDATE URLs
+
+// DELETE URLs
+
+
+// Providing an API which allows the url list to be fetched via JSON
+router.get('/urls.json', (req, res) => {
+  res.json(urlDatabase);
+});
+
+// TEST PAGES (not used in the main app)
 router.get('/hello-world.html', (req, res) => {
   res.send('<html><head><title>Hello world</title></head><body>Hello world</body></html>');
 })
