@@ -1,4 +1,5 @@
 const express = require('express');
+const app = express();
 const router = express.Router();
 const cookieParser = require('cookie-parser');
 // Import the database of URLs
@@ -6,6 +7,9 @@ const urlDatabase = require('../urlDatabase.js');
 // Import functions for POST requests
 const functions = require('../helperFunctions.js');
 const { generateRandomString } = require('../helperFunctions.js');
+const inspect = require('util').inspect;
+
+app.use(cookieParser());
 
 /// HOMEPAGE ///
 
@@ -15,11 +19,11 @@ router.get('/', (req, res) => {
 
 // CREATE new URLs
 router.get('/urls/new', (req, res) => {
-  const templateVars = { operation: 'Create' };
+  const templateVars = { operation: 'Create', username: req.cookies.username };
   res.render("urls_new", templateVars);
 })
+
 router.post('/urls', (req, res) => {
-  // console.log(req.body);
   const longURL = req.body.longURL;
   const randomShortURL = generateRandomString();
   urlDatabase[randomShortURL] = longURL;
@@ -29,10 +33,13 @@ router.post('/urls', (req, res) => {
 
 // READ URLs
 router.get('/urls', (req, res) => {
+  console.log(inspect(req.cookies));
   const templateVars = {
     urlDatabase,
-    operation: 'Browse'
+    operation: 'Browse', 
+    username: req.cookies.username
    };
+  console.log(templateVars.username);
   res.render("urls_index", templateVars);
 })
 
@@ -41,7 +48,8 @@ router.get('/url/:id', (req, res) => {
   const templateVars = {
     shortURL: req.params.id,
     longURL: urlDatabase[req.params.id],
-    operation: 'Read'
+    operation: 'Read',
+    username: req.cookies.username
   };
   res.render('../views/urls_detail.ejs', templateVars);
 })
@@ -51,7 +59,9 @@ router.get('/edit/:id', (req, res) => {
   const templateVars = { 
     shortURL: req.params.id, 
     longURL: urlDatabase[req.params.id],
-    operation: 'Update' };
+    operation: 'Update',
+    username: req.cookies.username
+   };
   res.render('urls_new', templateVars);
 })
 
@@ -74,9 +84,15 @@ router.get('/u/:id', (req, res) => {
   // Note: This only works if the http:// protocol is specified, otherwise it thinks it's a local file called google.ca!
 })
 
-// Cookies
+// Let's make some yummy, delicious delicacies! https://www.squarefree.com/extensions/delicious-delicacies/delicious-1.5.png
 router.post('/login', (req, res) => {
-  res.cookie('username', req.body.username, { domain: 'localhost', path: '/login'});
+  console.log(`username is: ${req.body.username}`);
+  res.cookie('username', req.body.username /*{ domain: 'localhost', path: '/login'}*/);
+  res.redirect('/urls');
+})
+// And signing out
+router.post('/logout', (req, res) => {
+  res.clearCookie('username');
   res.redirect('/urls');
 })
 
