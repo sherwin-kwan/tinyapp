@@ -1,0 +1,14 @@
+4cbc858 (HEAD -> newBranch) added a random comment
+7e6e31a (origin/master, origin/HEAD, master) added footer link to github repo
+2ce8fe3 old longURL now displays in the text box when editing a record
+b1ce364 used ternary notation to create a dual template that works for both Create and Edit
+aee315d deletion now works
+db902e4 fixed deletion button issue
+41671fe new short urls can now be created, post form works
+acfc62a created a helper function to generate an alphanumeric string
+00f31b1 body parser added so forms can be submitted
+3637bad added the URL detail page
+a88ace7 added a new template urls_index.ejs
+da031bf started doing some interpolations with variables in the ejs files
+97e413d created initial files and views
+d2ccb43 Initial commit
