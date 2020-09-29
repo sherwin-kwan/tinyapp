@@ -55,7 +55,9 @@ router.get('/edit/:id', (req, res) => {
 })
 
 router.post('/edit/:id', (req, res) => {
-  res.send('Posted');
+  const longURL = req.body.longURL;
+  urlDatabase[req.params.id] = longURL;
+  res.redirect(`/url/${req.params.id}`)
 })
 
 // DELETE URLs
