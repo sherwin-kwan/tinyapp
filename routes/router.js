@@ -4,6 +4,7 @@ var router = express.Router();
 const urlDatabase = require('../urlDatabase.js');
 // Import functions for POST requests
 const functions = require('../helperFunctions.js');
+const { generateRandomString } = require('../helperFunctions.js');
 
 /// HOMEPAGE ///
 
@@ -15,7 +16,15 @@ router.get('/', (req, res) => {
 router.get('/urls/new', (req, res) => {
   res.render("urls_new");
 })
-router.post('/urls', postNewUrl);
+router.post('/urls', (req, res) => {
+  // console.log(req.body);
+  const longURL = req.body.longURL;
+  const randomShortURL = generateRandomString();
+  urlDatabase[randomShortURL] = longURL;
+  console.log(urlDatabase);
+  res.redirect(`/url/${randomShortURL}`);
+});
+
 // READ URLs
 router.get('/urls', (req, res) => {
   const templateVars = { urls: urlDatabase };
@@ -32,6 +41,10 @@ router.get('/url/:shortURL', (req, res) => {
 
 // DELETE URLs
 
+// Actually redirect
+router.get('/u/:shortURL', (req, res) => {
+  
+})
 
 // Providing an API which allows the url list to be fetched via JSON
 router.get('/urls.json', (req, res) => {
