@@ -27,23 +27,28 @@ router.post('/urls', (req, res) => {
 
 // READ URLs
 router.get('/urls', (req, res) => {
-  const templateVars = { urls: urlDatabase };
+  const templateVars = { urlDatabase };
   res.render("urls_index", templateVars);
 })
 
 // SEE DETAIL for a single URL
-router.get('/url/:shortURL', (req, res) => {
-  const templateVars = {shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
+router.get('/url/:id', (req, res) => {
+  const templateVars = {shortURL: req.params.id, longURL: urlDatabase[req.params.id] };
   res.render('../views/urls_detail.ejs', templateVars);
 })
 
 // UPDATE URLs
 
 // DELETE URLs
+router.post('/delete/:id', (req, res) => {
+  delete urlDatabase[req.params.id];
+  const templateVars = { urlDatabase };
+  res.redirect('/urls');
+})
 
 // Actually redirect
-router.get('/u/:shortURL', (req, res) => {
-  res.redirect(urlDatabase[req.params.shortURL]); 
+router.get('/u/:id', (req, res) => {
+  res.redirect(urlDatabase[req.params.id]); 
   // Note: This only works if the http:// protocol is specified, otherwise it thinks it's a local file called google.ca!
 })
 
