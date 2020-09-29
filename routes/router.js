@@ -1,5 +1,6 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const cookieParser = require('cookie-parser');
 // Import the database of URLs
 const urlDatabase = require('../urlDatabase.js');
 // Import functions for POST requests
@@ -71,6 +72,12 @@ router.post('/delete/:id', (req, res) => {
 router.get('/u/:id', (req, res) => {
   res.redirect(urlDatabase[req.params.id]);
   // Note: This only works if the http:// protocol is specified, otherwise it thinks it's a local file called google.ca!
+})
+
+// Cookies
+router.post('/login', (req, res) => {
+  res.cookie('username', req.body.username, { domain: 'localhost', path: '/login'});
+  res.redirect('/urls');
 })
 
 // Providing an API which exposes the url list to be fetched via JSON
