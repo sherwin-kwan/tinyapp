@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <%- include('./partials/_head');  %> 
+  <%- include('./partials/_head');  %>
 </head>
+
 <body>
   <%- include('./partials/_header.ejs'); %>
   <main style="margin: 1em;">
@@ -12,27 +14,34 @@
         <tr>
           <th scope="col">Short URL</th>
           <th scope="col">Long URL</th>
+          <th scope="col">Edit URL</th>
           <th scope="col">Delete URL</th>
         </tr>
       </thead>
       <tbody>
         <% for(let url in urlDatabase) { %>
-          <tr>
-            <td><%= url %></td>
-            <td><%= urlDatabase[url] %></td>
-            <td><form method="POST" action="/delete/<%= url %>">
+        <tr>
+          <td><a href="/url/<%= url %>"><%= url %></a></td>
+          <td><%= urlDatabase[url] %></td>
+          <td>
+            <a class="btn btn-primary" href="/edit/<%= url %>">Edit</a>
+          </td>
+          <td>
+            <form method="POST" action="/delete/<%= url %>">
               <input type="submit" class="btn btn-primary" value="Delete"></form>
             </form>
-            </td>
-          </tr>
+          </td>
+        </tr>
         <% } %>
       </tbody>
     </table>
+    <a class="btn btn-primary" href="/urls/new">Create New Short URL!</a>
   </main>
   <!-- Bootstrap JS -->
   <footer>
     <%- include('./partials/_footer'); %>
   </footer>
-  
+
 </body>
+
 </html>

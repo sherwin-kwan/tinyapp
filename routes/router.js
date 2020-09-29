@@ -9,12 +9,13 @@ const { generateRandomString } = require('../helperFunctions.js');
 /// HOMEPAGE ///
 
 router.get('/', (req, res) => {
-  res.send("Hello world");
+  res.redirect('/urls');
 });
 
 // CREATE new URLs
 router.get('/urls/new', (req, res) => {
-  res.render("urls_new");
+  const templateVars = { operation: 'Create' };
+  res.render("urls_new", templateVars);
 })
 router.post('/urls', (req, res) => {
   // console.log(req.body);
@@ -27,17 +28,35 @@ router.post('/urls', (req, res) => {
 
 // READ URLs
 router.get('/urls', (req, res) => {
-  const templateVars = { urlDatabase };
+  const templateVars = {
+    urlDatabase,
+    operation: 'Browse'
+   };
   res.render("urls_index", templateVars);
 })
 
 // SEE DETAIL for a single URL
 router.get('/url/:id', (req, res) => {
-  const templateVars = {shortURL: req.params.id, longURL: urlDatabase[req.params.id] };
+  const templateVars = {
+    shortURL: req.params.id,
+    longURL: urlDatabase[req.params.id],
+    operation: 'Read'
+  };
   res.render('../views/urls_detail.ejs', templateVars);
 })
 
 // UPDATE URLs
+router.get('/edit/:id', (req, res) => {
+  const templateVars = { 
+    shortURL: req.params.id, 
+    longURL: urlDatabase[req.params.id],
+    operation: 'Update' };
+  res.render('urls_new', templateVars);
+})
+
+router.post('/edit/:id', (req, res) => {
+  res.send('Posted');
+})
 
 // DELETE URLs
 router.post('/delete/:id', (req, res) => {
@@ -46,18 +65,18 @@ router.post('/delete/:id', (req, res) => {
   res.redirect('/urls');
 })
 
-// Actually redirect
+// Redirect when a shortURL is entered
 router.get('/u/:id', (req, res) => {
-  res.redirect(urlDatabase[req.params.id]); 
+  res.redirect(urlDatabase[req.params.id]);
   // Note: This only works if the http:// protocol is specified, otherwise it thinks it's a local file called google.ca!
 })
 
-// Providing an API which allows the url list to be fetched via JSON
+// Providing an API which exposes the url list to be fetched via JSON
 router.get('/urls.json', (req, res) => {
   res.json(urlDatabase);
 });
 
-// TEST PAGES (not used in the main app)
+// TEST PAGES (not actually used for Tinyapp)
 router.get('/hello-world.html', (req, res) => {
   res.send('<html><head><title>Hello world</title></head><body>Hello world</body></html>');
 })

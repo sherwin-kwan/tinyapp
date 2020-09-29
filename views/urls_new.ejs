@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+  <!-- This template for Create or Editing URLs. The "operation" property is used to read whether this form is being
+  used as a Create or Edit form. -->
 
 <head>
   <%- include('./partials/_head.ejs'); %>
@@ -7,11 +9,11 @@
 
 <body>
   <%- include('./partials/_header.ejs'); %>
-  <main style="margin: 1em;">
-    <h3>Create TinyURL</h3>
-    <form class="form-inline" action="/urls" method="POST">
+  <main style="margin: 1em">
+    <h3><%= operation %> TinyURL</h3>
+    <form class="form-inline" action="<%= (operation === 'Update') ? `/edit/${shortURL}` : "/urls"; %>" method="POST">
       <div class="form-group mb-2">
-        <label for="longURL">Enter a URL:</label>
+        <label for="longURL"><%= (operation === 'Update') ? `Assign ${shortURL} to a new URL` : 'Enter URL'; %> (remember the http(s):// prefix!)</label>
         <input class="form-control" type="text" name="longURL" placeholder="http://" style="width: 300px; margin: 1em">
         <button type="submit" class="btn btn-primary">Submit</button>
       </div>
