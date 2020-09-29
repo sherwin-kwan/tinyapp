@@ -86,8 +86,8 @@ router.get('/u/:id', (req, res) => {
 
 // Let's make some yummy, delicious delicacies! https://www.squarefree.com/extensions/delicious-delicacies/delicious-1.5.png
 router.post('/login', (req, res) => {
-  console.log(`username is: ${req.body.username}`);
   res.cookie('username', req.body.username /*{ domain: 'localhost', path: '/login'}*/);
+  console.log('Delicious cookie just came hot out of the oven!');
   res.redirect('/urls');
 })
 // And signing out
