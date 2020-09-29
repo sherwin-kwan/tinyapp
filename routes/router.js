@@ -14,6 +14,9 @@ router.get('/urls', (req, res) => {
   res.render("urls_index", templateVars);
 })
 
+router.get('/urls/new', (req, res) => {
+  res.render("urls_new");
+})
 // Providing an API which allows the url list to be fetched via JSON
 router.get('/urls.json', (req, res) => {
   res.json(urlDatabase);
