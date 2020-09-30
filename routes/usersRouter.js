@@ -84,14 +84,5 @@ router.post('/register', (req, res) => {
   res.redirect('/urls');
 });
 
-// A generic forbidden or error page
-router.get('/forbidden', (req, res) => {
-  const templateVars = {
-    operation: 'Error',
-    userID: null,
-    userName: null
-  };
-  res.render('forbidden.ejs', templateVars);
-})
 
 module.exports = router;

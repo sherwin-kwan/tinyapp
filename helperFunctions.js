@@ -1,4 +1,5 @@
 const users = require('./data/usersDatabase.js');
+const urlDatabase = require('./urlDatabase');
 
 const generateRandomString = () => {
   return Math.random().toString(36).slice(2, 8);
@@ -14,6 +15,14 @@ const findUserByEmail = (email) => {
   return false;
 };
 
+const filterUrlDatabase = (userID) => {
+  let output = new Object;
+  // Yes, I'm hard-coding this function to use a particular database. I don't want to overdo things by making things more modular.
+  for (let shortURL in urlDatabase) {
+    
+  }
+}
+
 // A variable that gives the user's name if they are logged in, or is null when they are not
 const getUsersName = (id) => {
   return (users[id]) ? users[id].name : null;
@@ -24,4 +33,4 @@ const getUsersName = (id) => {
 //   console.log(generateRandomString());
 // }
 
-module.exports = { generateRandomString, getUsersName, findUserByEmail };
+module.exports = { generateRandomString, getUsersName, filterUrlDatabase, findUserByEmail };

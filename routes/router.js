@@ -7,11 +7,28 @@ const cookieParser = require('cookie-parser');
 const urlDatabase = require('../data/urlDatabase.js');
 const users = require('../data/usersDatabase.js');
 // Import functions for POST requests
-const { generateRandomString, getUsersName } = require('../helperFunctions.js');
+const { generateRandomString, getUsersName, filterUrlDatabase } = require('../helperFunctions.js');
 const inspect = require('util').inspect;
 
 console.log(app);
 app.use(cookieParser());
+
+// Making code DRY - this global variable saves the default template variables passed to EJS
+// If no req is passed, 
+const defaultTemplateVars = (userID) => {
+  const def = {
+    operation: 'Placeholder',
+    userID: req.cookies.userID,
+    userName: getUsersName(req.cookies.userID)
+  };
+  const notLoggedIn = {
+    operation: 'Not logged in',
+    userID: null,
+    userName: null,
+    message: 'Placeholder'
+  };
+  return (userID) ? def : notLoggedIn;
+}
 
 /// HOMEPAGE ///
 
@@ -21,19 +38,25 @@ router.get('/', (req, res) => {
 
 // CREATE new URLs - only for logged-in users
 router.get('/urls/new', (req, res) => {
-  if (!req.cookies.userID) {
-    res.redirect('/users/forbidden');
+  let templateVars = defaultTemplateVars(req.cookies.userID);
+  if (req.cookies.userID) {
+    templateVars.operation = 'Create';
+    res.render("urls_new", templateVars);
+  } else { 
+    // When user isn't logged in, they are given an error page and asked to log in or register.
+    templateVars.message = 'Please log in before creating a new shortened URL.';
+    res.render('error', templateVars);
     return;
   }
-  const templateVars = {
-    operation: 'Create',
-    userID: req.cookies.userID,
-    userName: getUsersName(req.cookies.userID)
-  };
-  res.render("urls_new", templateVars);
 });
 
 router.post('/urls', (req, res) => {
+  if (!req.cookies.userID) {
+    let templateVars = defaultTemplateVars();
+    templateVars.message = 'Please log in before creating a new shortened URL.';
+    res.render('error', templateVars);
+    return;
+  };
   const longURL = req.body.longURL;
   let randomShortURL;
   do {
@@ -47,13 +70,9 @@ router.post('/urls', (req, res) => {
 // READ URLs
 router.get('/urls', (req, res) => {
   console.log(inspect(req.cookies));
-  const templateVars = {
-    urlDatabase,
-    operation: 'Browse',
-    userID: req.cookies.userID,
-    userName: getUsersName(req.cookies.userID)
-  };
-  console.log(templateVars.userID);
+  let templateVars = defaultTemplateVars(req.cookies.userID);
+  templateVars.urlDatabase = filterUrlDatabase(req.cookies.userID);
+  templateVars.operation = 'Browse';
   res.render("urls_index", templateVars);
 });
 
@@ -76,7 +95,7 @@ router.get('/edit/:id', (req, res) => {
     longURL: urlDatabase[req.params.id].longURL,
     operation: 'Update',
     userID: req.cookies.userID,
-    userName: users[req.cookies.userID].name || undefined
+    userName: getUsersName(req.cookies.userID)
   };
   res.render('urls_new', templateVars);
 });
@@ -104,6 +123,15 @@ router.get('/urls.json', (req, res) => {
   res.json(urlDatabase);
 });
 
-
+// A generic page to catch errors
+router.get('/error', (req, res) => {
+  const templateVars = {
+    operation: 'Error',
+    userID: req.cookies.userID || null,
+    userName:  getUsersName(req.cookies.userID),
+    message: null
+  };
+  res.render('error.ejs', templateVars);
+})
 
 module.exports = router;
