@@ -8,6 +8,11 @@ const users = {
     name: 'Jill',
     email: 'example@example.edu',
     password: 'correct-horse'
+  },
+  daroot: {
+    name: 'Boss',
+    email: 'daroot@theboss.com',
+    password: 'battery-staple'
   }
 };
 

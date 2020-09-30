@@ -50,7 +50,7 @@ router.get('/urls/new', (req, res) => {
   }
 });
 
-router.post('/urls', (req, res) => {
+router.post('/urls/new', (req, res) => {
   if (!req.cookies.userID) {
     let templateVars = defaultTemplateVars();
     templateVars.message = 'Please log in before creating a new shortened URL.';

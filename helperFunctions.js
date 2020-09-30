@@ -18,10 +18,19 @@ const findUserByEmail = (email) => {
 const filterUrlDatabase = (userID) => {
   let output = new Object;
   // Yes, I'm hard-coding this function to use a particular database. I don't want to overdo things by making things more modular.
-  for (let shortURL in urlDatabase) {
-
+  if (userID === 'daroot') {
+    // 'Daroot' is an admin account that can read, edit, and delete everyone's URLs
+    return urlDatabase;
   }
-}
+  for (let shortURL in urlDatabase) {
+    if (urlDatabase[shortURL].userID === userID) {
+      output[shortURL] = urlDatabase[shortURL];
+    }
+  }
+  return output;
+};
+
+console.log(filterUrlDatabase('abcdef'));
 
 // A variable that gives the user's name if they are logged in, or is null when they are not
 const getUsersName = (id) => {
