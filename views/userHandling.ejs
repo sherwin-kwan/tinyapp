@@ -12,21 +12,24 @@
   <section>Warning, DO NOT use an actual password you use for other sites here. THIS IS FOR DEMONSTRATION PURPOSES ONLY.
     PASSWORDS ARE STORED IN PLAIN TEXT AND ARE NOT SECURE!
   </section>
-<!-- 
+  <!-- 
   <form class="navbar-nav" style="margin-left: 50px" method="POST" action="/users/login">
     Note: For show only. Currently it doesn't actually check that email matches password! 
     <label for="email">Email</label><input type="text" name="email">
     <label for="password">Password</label><input type="text" name="password">
     <input type="submit" class="btn btn-primary" value="Sign In">
   </form> -->
-  <form action="/users/register" method="POST">
-    <label for="name">Name</label>
-    <input class="form-create" name="name" type="text">
+  <form action="<%= (operation === 'Register') ? '/users/register' : '/users/login'; %>" method="POST">
+    <div id="name-wrapper" <% if (operation === 'Login')  { %> style="display: none" <% } %> >
+      <label for="name">Name</label>
+      <input class="form-create" name="name" type="text">
+    </div>
     <label for="email">Email: </label>
     <input class="form-create" name="email" type="text">
     <label for="password">Password: </label>
     <input class="form-create" name="password" type="text">
-    <input class="btn btn-primary" type="submit" value="<%= (operation === 'Register') ? 'Register New Account' : 'Sign In'; %>">
+    <input class="btn btn-primary" type="submit"
+      value="<%= (operation === 'Register') ? 'Register New Account' : 'Sign In'; %>">
   </form>
 </body>
 <footer>
