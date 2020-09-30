@@ -1,4 +1,4 @@
-const users = require('./usersDatabase.js');
+const users = require('./data/usersDatabase.js');
 
 const generateRandomString = () => {
   return Math.random().toString(36).slice(2, 8);

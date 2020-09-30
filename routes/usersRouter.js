@@ -3,7 +3,7 @@
 const express = require('express');
 const router = express.Router();
 // Import the database of URLs
-const users = require('../usersDatabase.js');
+const users = require('../data/usersDatabase.js');
 // Import functions for POST requests
 const { generateRandomString, findUserByEmail } = require('../helperFunctions.js');
 const inspect = require('util').inspect;
@@ -83,5 +83,15 @@ router.post('/register', (req, res) => {
   res.cookie('userID', userID);
   res.redirect('/urls');
 });
+
+// A generic forbidden or error page
+router.get('/forbidden', (req, res) => {
+  const templateVars = {
+    operation: 'Error',
+    userID: null,
+    userName: null
+  };
+  res.render('forbidden.ejs', templateVars);
+})
 
 module.exports = router;

@@ -14,6 +14,7 @@
         <tr>
           <th scope="col">Short URL</th>
           <th scope="col">Long URL</th>
+          <th scope="col">Created By</th>
           <th scope="col">Edit URL</th>
           <th scope="col">Delete URL</th>
         </tr>
@@ -22,7 +23,8 @@
         <% for(let url in urlDatabase) { %>
         <tr>
           <td><a href="/url/<%= url %>"><%= url %></a></td>
-          <td><%= urlDatabase[url] %></td>
+          <td><%= urlDatabase[url].longURL %></td>
+          <td><%= urlDatabase[url].userID %></td>
           <td>
             <a class="btn btn-primary" href="/edit/<%= url %>">Edit</a>
           </td>

@@ -4,8 +4,8 @@ console.log('app is: ' + app);
 const router = express.Router();
 const cookieParser = require('cookie-parser');
 // Import the database of URLs
-const urlDatabase = require('../urlDatabase.js');
-const users = require('../usersDatabase.js');
+const urlDatabase = require('../data/urlDatabase.js');
+const users = require('../data/usersDatabase.js');
 // Import functions for POST requests
 const { generateRandomString, getUsersName } = require('../helperFunctions.js');
 const inspect = require('util').inspect;
@@ -19,8 +19,12 @@ router.get('/', (req, res) => {
   res.redirect('/urls');
 });
 
-// CREATE new URLs
+// CREATE new URLs - only for logged-in users
 router.get('/urls/new', (req, res) => {
+  if (!req.cookies.userID) {
+    res.redirect('/users/forbidden');
+    return;
+  }
   const templateVars = {
     operation: 'Create',
     userID: req.cookies.userID,
@@ -35,7 +39,7 @@ router.post('/urls', (req, res) => {
   do {
     randomShortURL = generateRandomString();
   } while (Object.keys(urlDatabase).includes(randomShortURL)); // Avoids duplicates
-  urlDatabase[randomShortURL] = longURL;
+  urlDatabase[randomShortURL].longURL = longURL;
   console.log(urlDatabase);
   res.redirect(`/url/${randomShortURL}`);
 });
@@ -57,7 +61,7 @@ router.get('/urls', (req, res) => {
 router.get('/url/:id', (req, res) => {
   const templateVars = {
     shortURL: req.params.id,
-    longURL: urlDatabase[req.params.id],
+    longURL: urlDatabase[req.params.id].longURL,
     operation: 'Read',
     userID: req.cookies.userID,
     userName: getUsersName(req.cookies.userID)
@@ -69,7 +73,7 @@ router.get('/url/:id', (req, res) => {
 router.get('/edit/:id', (req, res) => {
   const templateVars = {
     shortURL: req.params.id,
-    longURL: urlDatabase[req.params.id],
+    longURL: urlDatabase[req.params.id].longURL,
     operation: 'Update',
     userID: req.cookies.userID,
     userName: users[req.cookies.userID].name || undefined
@@ -91,7 +95,7 @@ router.post('/delete/:id', (req, res) => {
 
 // Redirect when a shortURL is entered
 router.get('/u/:id', (req, res) => {
-  res.redirect(urlDatabase[req.params.id]);
+  res.redirect(urlDatabase[req.params.id].longURL);
   // Note: This only works if the http:// protocol is specified, otherwise it thinks it's a local file called google.ca!
 });
 
@@ -100,34 +104,6 @@ router.get('/urls.json', (req, res) => {
   res.json(urlDatabase);
 });
 
-// TEST PAGES (not actually used for Tinyapp)
-// router.get('/hello-world.html', (req, res) => {
-//   res.send('<html><head><title>Hello world</title></head><body>Hello world</body></html>');
-// });
 
-// router.get('/testing.html', (req, res) => {
-//   const mascots = [
-//     { name: 'Sammy', organization: "DigitalOcean", birth_year: 2012 },
-//     { name: 'Tux', organization: "Linux", birth_year: 1996 },
-//     { name: 'Moby Dock', organization: "Docker", birth_year: 2013 }
-//   ];
-//   const tagline = "No programming concept is complete without a cute animal mascot.";
-//   res.render('testIndex', {
-//     mascots: mascots,
-//     tagline: tagline
-//   });
-//   res.render('testIndex.ejs');
-// });
-
-// Example code showing what happens when you call variables out of scope
-// router.get("/set", (req, res) => {
-//   const a = 1;
-//   res.send(`a = ${a}`);
-// });
-
-// router.get("/fetch", (req, res) => {
-//   res.send(`a = ${a}`);
-// });
-// END OF TEST PAGES
 
 module.exports = router;
