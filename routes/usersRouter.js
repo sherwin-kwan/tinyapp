@@ -1,3 +1,5 @@
+// This router handles all pages involving users logging in and out or registering a new account.
+
 const express = require('express');
 const app = express();
 const router = express.Router();
@@ -11,6 +13,20 @@ const { generateRandomString, getUsersName, findUserByEmail } = require('../help
 const inspect = require('util').inspect;
 
 // Let's make some yummy, delicious delicacies! https://www.squarefree.com/extensions/delicious-delicacies/delicious-1.5.png
+
+router.get('/login', (req, res) => {
+  if (req.cookies.user_id) {
+    res.send('<html>You are already logged in. Return to <a href="/urls">homepage</a></html>?');
+  } else {
+    const templateVars = {
+      operation: 'Login',
+      user_id: null,
+      user_name: null
+    };
+    res.render('userHandling.ejs', templateVars);
+  }
+})
+
 router.post('/login', (req, res) => {
   const user_id = findUserByEmail(req.body.email);
   if (!user_id) {
@@ -28,14 +44,32 @@ router.post('/logout', (req, res) => {
 
 // User registration, with actual passwords:
 router.get('/register', (req, res) => {
-  templateVars = {
-    user_id: req.cookies.user_id,
-    user_name: users[req.cookies.user_id].name || undefined
+  if (req.cookies.user_id) {
+    res.send('<html>You are already logged in. Return to <a href="/urls">homepage</a></html>?');
+  } else {
+    const templateVars = {
+      operation: 'Register',
+      user_id: null,
+      user_name: null
+    };
+    res.render('userHandling.ejs', templateVars);
   }
-  res.render('register.ejs', templateVars);
 })
 
 router.post('/register', (req, res) => {
+  const seeIfUserExists = findUserByEmail(req.body.email);
+  // Handles the case where a user attempts to register with an email that already has an account
+  if (seeIfUserExists) {
+    res.status(400).send('User already exists');
+    // res.cookie('user_id', seeIfUserExists);
+    // res.redirect('/urls');
+    return;
+  };
+  // If email or password (required fields) aren't filled in.
+  if (!req.body.email || !req.body.password) {
+    res.status(400).send('Email and password are required');
+    return;
+  };
   let user_id = '';
   do {
     user_id = generateRandomString();
