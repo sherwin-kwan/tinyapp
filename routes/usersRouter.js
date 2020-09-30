@@ -30,7 +30,7 @@ router.get('/login', (req, res) => {
 router.post('/login', (req, res) => {
   const user_id = findUserByEmail(req.body.email);
   if (!user_id) {
-    res.status(400).send(`This user doesn't exist. Nice try, hacker!`);
+    res.status(403).send(`This user doesn't exist. Nice try, hacker!`);
     return;
   };
   if (users[user_id].password !== req.body.password) {
@@ -65,14 +65,12 @@ router.post('/register', (req, res) => {
   const seeIfUserExists = findUserByEmail(req.body.email);
   // Handles the case where a user attempts to register with an email that already has an account
   if (seeIfUserExists) {
-    res.status(400).send('User already exists');
-    // res.cookie('user_id', seeIfUserExists);
-    // res.redirect('/urls');
+    res.status(400).send(`<html>Welcome back, ${users[seeIfUserExists].name}, you actually already have an account. <a href="/users/login">Sign in</a></html>?`);
     return;
   };
   // If email or password (required fields) aren't filled in.
-  if (!req.body.email || !req.body.password) {
-    res.status(400).send('Email and password are required');
+  if (!req.body.name || !req.body.email || !req.body.password) {
+    res.status(400).send('Name, email, and password are required');
     return;
   };
   let user_id = '';
@@ -80,6 +78,7 @@ router.post('/register', (req, res) => {
     user_id = generateRandomString();
   } while (Object.keys(users).includes(user_id)); // Avoids duplicates
   users[user_id] = {
+    name: req.body.name,
     email: req.body.email,
     password: req.body.password
   };
