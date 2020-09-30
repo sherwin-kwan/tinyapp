@@ -1,5 +1,5 @@
 const users = require('./data/usersDatabase.js');
-const urlDatabase = require('./urlDatabase');
+const urlDatabase = require('./data/urlDatabase.js');
 
 const generateRandomString = () => {
   return Math.random().toString(36).slice(2, 8);
@@ -19,7 +19,7 @@ const filterUrlDatabase = (userID) => {
   let output = new Object;
   // Yes, I'm hard-coding this function to use a particular database. I don't want to overdo things by making things more modular.
   for (let shortURL in urlDatabase) {
-    
+
   }
 }
 

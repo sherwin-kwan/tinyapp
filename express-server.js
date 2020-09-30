@@ -20,6 +20,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 // Cookie parser to handle user cookies
 app.use(cookieParser());
 
+// Stylesheets
+app.use(express.static('public'));
+
 // Output request log to console
 morgan('tiny');
 

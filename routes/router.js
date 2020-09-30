@@ -18,8 +18,8 @@ app.use(cookieParser());
 const defaultTemplateVars = (userID) => {
   const def = {
     operation: 'Placeholder',
-    userID: req.cookies.userID,
-    userName: getUsersName(req.cookies.userID)
+    userID: userID,
+    userName: getUsersName(userID)
   };
   const notLoggedIn = {
     operation: 'Not logged in',
