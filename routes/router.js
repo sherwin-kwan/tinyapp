@@ -19,7 +19,8 @@ const defaultTemplateVars = (userID) => {
   const def = {
     operation: 'Placeholder',
     userID: userID,
-    userName: getUsersName(userID)
+    userName: getUsersName(userID),
+    message: 'Placeholder'
   };
   const notLoggedIn = {
     operation: 'Not logged in',
@@ -67,7 +68,7 @@ router.post('/urls/new', (req, res) => {
   res.redirect(`/url/${randomShortURL}`);
 });
 
-// READ URLs
+// READ (BROWSE) all URLs
 router.get('/urls', (req, res) => {
   console.log(inspect(req.cookies));
   let templateVars = defaultTemplateVars(req.cookies.userID);
@@ -87,39 +88,83 @@ router.get('/urls', (req, res) => {
   res.render("urls_index", templateVars);
 });
 
-// SEE DETAIL for a single URL
+// READ a single URL document in the database
 router.get('/url/:id', (req, res) => {
   let templateVars = defaultTemplateVars(req.cookies.userID);
-  Object.assign(templateVars, {
-    shortURL: req.params.id,
-    longURL: urlDatabase[req.params.id].longURL,
-    operation: 'Read'
-  });
-  res.render('../views/urls_detail.ejs', templateVars);
+  // Check to make sure the current user has access to the requested document in the database
+  // (i.e. was the creator of this URL, or is admin)
+  let document = urlDatabase[req.params.id];
+  switch (req.cookies.userID) {
+    case document.userID:
+    case 'daroot':
+      Object.assign(templateVars, {
+        shortURL: req.params.id,
+        longURL: document.longURL,
+        operation: 'Read'
+      });
+      res.render('urls_detail', templateVars);
+      break;
+    default:
+      templateVars.message = 'You can only view details for URLs that you created.';
+      res.render('error', templateVars);
+  }
 });
 
 // UPDATE URLs
 router.get('/edit/:id', (req, res) => {
-  const templateVars = {
-    shortURL: req.params.id,
-    longURL: urlDatabase[req.params.id].longURL,
-    operation: 'Update',
-    userID: req.cookies.userID,
-    userName: getUsersName(req.cookies.userID)
-  };
-  res.render('urls_new', templateVars);
+  let templateVars = defaultTemplateVars(req.cookies.userID);
+  // Check to make sure the current user has access to the requested document in the database
+  // (i.e. was the creator of this URL, or is admin)
+  let document = urlDatabase[req.params.id];
+  switch (req.cookies.userID) {
+    case document.userID:
+    case 'daroot':
+      Object.assign(templateVars, {
+        shortURL: req.params.id,
+        longURL: document.longURL,
+        operation: 'Update',
+      });
+      res.render('urls_new', templateVars);
+      break;
+    default:
+      templateVars.message = 'You can only update details for URLs that you created.';
+      res.render('error', templateVars);
+  }
 });
 
 router.post('/edit/:id', (req, res) => {
-  const longURL = req.body.longURL;
-  urlDatabase[req.params.id] = longURL;
-  res.redirect(`/url/${req.params.id}`);
+  let templateVars = defaultTemplateVars(req.cookies.userID);
+  // Check to make sure the current user has access to the requested document in the database
+  // (i.e. was the creator of this URL, or is admin)
+  let document = urlDatabase[req.params.id]; // This should be a pointer, so modifying 'document' modifies the actual document in the database
+  switch (req.cookies.userID) {
+    case document.userID:
+    case 'daroot':
+      document.longURL = req.body.longURL;
+      res.redirect(`/url/${req.params.id}`);
+      break;
+    default:
+      templateVars.message = 'You can only update details for URLs that you created.';
+      res.render('error', templateVars);
+  }
 });
 
 // DELETE URLs
 router.post('/delete/:id', (req, res) => {
-  delete urlDatabase[req.params.id];
-  res.redirect('/urls');
+  let templateVars = defaultTemplateVars(req.cookies.userID);
+  // Check to make sure the current user has access to the requested document in the database
+  // (i.e. was the creator of this URL, or is admin)
+  let document = urlDatabase[req.params.id]; // This should be a pointer, so modifying 'document' modifies the actual document in the database
+  switch (req.cookies.userID) {
+    case document.userID:
+    case 'daroot':
+      delete urlDatabase[req.params.id];
+      res.redirect(`/urls`);
+      break;
+    default:
+      templateVars.message = 'You can only delete URLs that you created.';
+      res.render('error', templateVars);
+  }
 });
 
 // Redirect when a shortURL is entered
