@@ -30,8 +30,13 @@ router.get('/login', (req, res) => {
 router.post('/login', (req, res) => {
   const user_id = findUserByEmail(req.body.email);
   if (!user_id) {
-    throw new Error(`This user doesn't exist. Nice try, hacker!`);
+    res.status(400).send(`This user doesn't exist. Nice try, hacker!`);
+    return;
   };
+  if (users[user_id].password !== req.body.password) {
+    res.status(403).send('You got the wrong password. Nice try, hacker!');
+    return;
+  }
   res.cookie('user_id', user_id);
   console.log('Delicious cookie just came hot out of the oven!');
   res.redirect('/urls');

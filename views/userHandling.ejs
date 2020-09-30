@@ -7,18 +7,14 @@
 
 <body>
   <%- include('./partials/_header.ejs'); %>
-  <h1>So you wanna register a new account, eh?</h1>
+  <h1>So you wanna <%= (operation === 'Register') ? 'register a new account' : 'log in'; %>, eh?</h1>
   <h5>You've come to the right place.</h5>
-  <section>Warning, DO NOT use an actual password you use for other sites here. THIS IS FOR DEMONSTRATION PURPOSES ONLY.
+  <section id="passwordWarning">Warning, DO NOT use an actual password you use for other sites here. THIS IS FOR DEMONSTRATION PURPOSES ONLY.
     PASSWORDS ARE STORED IN PLAIN TEXT AND ARE NOT SECURE!
   </section>
-  <!-- 
-  <form class="navbar-nav" style="margin-left: 50px" method="POST" action="/users/login">
-    Note: For show only. Currently it doesn't actually check that email matches password! 
-    <label for="email">Email</label><input type="text" name="email">
-    <label for="password">Password</label><input type="text" name="password">
-    <input type="submit" class="btn btn-primary" value="Sign In">
-  </form> -->
+  <section id="switchFormat">
+    <%- (operation === 'Register') ? 'Already have an account? <a href="/users/login">Sign In!</a>' : `Don't have an account yet? <a href="/users/register">Register today!</a>` %>
+  </section>
   <form action="<%= (operation === 'Register') ? '/users/register' : '/users/login'; %>" method="POST">
     <div id="name-wrapper" <% if (operation === 'Login')  { %> style="display: none" <% } %> >
       <label for="name">Name</label>
