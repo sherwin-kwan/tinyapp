@@ -7,7 +7,8 @@ const urlDatabase = require('../urlDatabase.js');
 const users = require('../usersDatabase.js');
 // Import functions for POST requests
 const functions = require('../helperFunctions.js');
-const { generateRandomString } = require('../helperFunctions.js');
+const { generateRandomString, findUserByEmail } = require('../helperFunctions.js');
+const { exists } = require('fs');
 const inspect = require('util').inspect;
 
 app.use(cookieParser());
@@ -20,13 +21,16 @@ router.get('/', (req, res) => {
 
 // CREATE new URLs
 router.get('/urls/new', (req, res) => {
-  const templateVars = { operation: 'Create', username: req.cookies.username };
+  const templateVars = { operation: 'Create', user_id: req.cookies.user_id };
   res.render("urls_new", templateVars);
 })
 
 router.post('/urls', (req, res) => {
   const longURL = req.body.longURL;
-  const randomShortURL = generateRandomString();
+  let randomShortURL;
+  do {
+    randomShortURL = generateRandomString();
+  } while (Object.keys(urlDatabase).includes(randomShortURL)); // Avoids duplicates
   urlDatabase[randomShortURL] = longURL;
   console.log(urlDatabase);
   res.redirect(`/url/${randomShortURL}`);
@@ -38,9 +42,9 @@ router.get('/urls', (req, res) => {
   const templateVars = {
     urlDatabase,
     operation: 'Browse',
-    username: req.cookies.username
+    user_id: req.cookies.user_id
   };
-  console.log(templateVars.username);
+  console.log(templateVars.user_id);
   res.render("urls_index", templateVars);
 })
 
@@ -50,7 +54,7 @@ router.get('/url/:id', (req, res) => {
     shortURL: req.params.id,
     longURL: urlDatabase[req.params.id],
     operation: 'Read',
-    username: req.cookies.username
+    user_id: req.cookies.user_id
   };
   res.render('../views/urls_detail.ejs', templateVars);
 })
@@ -61,7 +65,7 @@ router.get('/edit/:id', (req, res) => {
     shortURL: req.params.id,
     longURL: urlDatabase[req.params.id],
     operation: 'Update',
-    username: req.cookies.username
+    user_id: req.cookies.user_id
   };
   res.render('urls_new', templateVars);
 })
@@ -87,35 +91,39 @@ router.get('/u/:id', (req, res) => {
 
 // Let's make some yummy, delicious delicacies! https://www.squarefree.com/extensions/delicious-delicacies/delicious-1.5.png
 router.post('/login', (req, res) => {
-  res.cookie('username', req.body.username /*{ domain: 'localhost', path: '/login'}*/);
+  const user_id = findUserByEmail(req.body.email);
+  if (!user_id) {
+    throw new Error(`This user doesn't exist. Nice try, hacker!`);
+  };
+  res.cookie('user_id', user_id);
   console.log('Delicious cookie just came hot out of the oven!');
   res.redirect('/urls');
 })
 // And signing out
 router.post('/logout', (req, res) => {
-  res.clearCookie('username');
+  res.clearCookie('user_id');
   res.redirect('/urls');
 })
 
 // User registration, with actual passwords:
 router.get('/register', (req, res) => {
   templateVars = {
-    username: req.cookies.username
+    user_id: req.cookies.user_id
   }
   res.render('register.ejs', templateVars);
 })
 
 router.post('/register', (req, res) => {
-  let userID = '';
+  let user_id = '';
   do {
-    userID = generateRandomString();
-  } while (Object.keys(users).includes(userID)); // Avoids duplicates
-  users[userID] = {
+    user_id = generateRandomString();
+  } while (Object.keys(users).includes(user_id)); // Avoids duplicates
+  users[user_id] = {
     email: req.body.email,
     password: req.body.password
   };
-  console.log('New user record is: ' + inspect(users[userID]));
-  res.cookie('user_id', userID);
+  console.log('New user record is: ' + inspect(users[user_id]));
+  res.cookie('user_id', user_id);
   res.redirect('/urls');
 })
 

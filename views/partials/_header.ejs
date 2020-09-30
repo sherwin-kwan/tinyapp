@@ -8,14 +8,16 @@
       <div class="navbar-nav">
         <a class="nav-item nav-link" href="/urls">My URLs</a>
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
-        <% if (username) { %>
-          <p class="navbar-nav" style="margin-left: 50px; margin-right: 50px">You're logged in, <%= username %></p>
+        <% if (user_id) { %>
+          <p class="navbar-nav" style="margin-left: 50px; margin-right: 50px">You're logged in, <%= user_id %></p>
           <form class="navbar-nav" method="POST" action="/logout">
             <input type="submit" class="btn btn-primary" value="Sign Out">
           </form>
         <% } else { %>
-          <form class="navbar-nav" style="margin-left: 100px" method="POST" action="/login">
-            <input type="text" name="username">
+          <form class="navbar-nav" style="margin-left: 50px" method="POST" action="/login">
+            <!-- Note: For show only. Currently it doesn't actually check email and password! -->
+            <label for="email">Email</label><input type="text" name="email">
+            <label for="password">Password</label><input type="text" name="password">
             <input type="submit" class="btn btn-primary" value="Sign In">
           </form>
         <% } %>
