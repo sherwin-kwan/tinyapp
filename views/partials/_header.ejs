@@ -10,11 +10,11 @@
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
         <% if (user_id) { %>
           <p class="navbar-nav" style="margin-left: 50px; margin-right: 50px">You're logged in, <%= user_name %></p>
-          <form class="navbar-nav" method="POST" action="/logout">
+          <form class="navbar-nav" method="POST" action="/users/logout">
             <input type="submit" class="btn btn-primary" value="Sign Out">
           </form>
         <% } else { %>
-          <form class="navbar-nav" style="margin-left: 50px" method="POST" action="/login">
+          <form class="navbar-nav" style="margin-left: 50px" method="POST" action="/users/login">
             <!-- Note: For show only. Currently it doesn't actually check that email matches password! -->
             <label for="email">Email</label><input type="text" name="email">
             <label for="password">Password</label><input type="text" name="password">
