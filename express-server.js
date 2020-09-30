@@ -5,10 +5,8 @@ const PORT = 8080;
 app.set('view engine', 'ejs');
 const router = require('./routes/router.js');
 const usersRouter = require('./routes/usersRouter.js');
-const urlDatabase = require('./urlDatabase.js');
 const cookieParser = require('cookie-parser');
-const morgan = require('morgan')
-
+const morgan = require('morgan');
 
 const bodyParser = require("body-parser");
 // Creating the server

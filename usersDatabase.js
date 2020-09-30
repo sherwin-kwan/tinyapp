@@ -9,6 +9,6 @@ const users = {
     email: 'example@example.edu',
     password: 'correct-horse'
   }
-}
+};
 
 module.exports = users;
