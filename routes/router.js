@@ -42,7 +42,7 @@ router.get('/urls/new', (req, res) => {
   if (req.cookies.userID) {
     templateVars.operation = 'Create';
     res.render("urls_new", templateVars);
-  } else { 
+  } else {
     // When user isn't logged in, they are given an error page and asked to log in or register.
     templateVars.message = 'Please log in before creating a new shortened URL.';
     res.render('error', templateVars);
@@ -72,19 +72,29 @@ router.get('/urls', (req, res) => {
   console.log(inspect(req.cookies));
   let templateVars = defaultTemplateVars(req.cookies.userID);
   templateVars.urlDatabase = filterUrlDatabase(req.cookies.userID);
-  templateVars.operation = 'Browse';
+  if (req.cookies.userID) {
+    Object.assign(templateVars, {
+      operation: 'Browse',
+      message: `Behold, all the shortened URLs you've created are listed below!`
+    });
+  } else {
+    Object.assign(templateVars, {
+      operation: 'Welcome',
+      message: `Please <a href="/users/login">log in</a> or <a href="/users/register">register</a> to begin, 
+      you won't be able to see any URLs here until you do.`
+    });
+  }
   res.render("urls_index", templateVars);
 });
 
 // SEE DETAIL for a single URL
 router.get('/url/:id', (req, res) => {
-  const templateVars = {
+  let templateVars = defaultTemplateVars(req.cookies.userID);
+  Object.assign(templateVars, {
     shortURL: req.params.id,
     longURL: urlDatabase[req.params.id].longURL,
-    operation: 'Read',
-    userID: req.cookies.userID,
-    userName: getUsersName(req.cookies.userID)
-  };
+    operation: 'Read'
+  });
   res.render('../views/urls_detail.ejs', templateVars);
 });
 
@@ -128,7 +138,7 @@ router.get('/error', (req, res) => {
   const templateVars = {
     operation: 'Error',
     userID: req.cookies.userID || null,
-    userName:  getUsersName(req.cookies.userID),
+    userName: getUsersName(req.cookies.userID),
     message: null
   };
   res.render('error.ejs', templateVars);
