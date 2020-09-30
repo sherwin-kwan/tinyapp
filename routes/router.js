@@ -4,6 +4,7 @@ const router = express.Router();
 const cookieParser = require('cookie-parser');
 // Import the database of URLs
 const urlDatabase = require('../urlDatabase.js');
+const users = require('../usersDatabase.js');
 // Import functions for POST requests
 const functions = require('../helperFunctions.js');
 const { generateRandomString } = require('../helperFunctions.js');
@@ -36,9 +37,9 @@ router.get('/urls', (req, res) => {
   console.log(inspect(req.cookies));
   const templateVars = {
     urlDatabase,
-    operation: 'Browse', 
+    operation: 'Browse',
     username: req.cookies.username
-   };
+  };
   console.log(templateVars.username);
   res.render("urls_index", templateVars);
 })
@@ -56,12 +57,12 @@ router.get('/url/:id', (req, res) => {
 
 // UPDATE URLs
 router.get('/edit/:id', (req, res) => {
-  const templateVars = { 
-    shortURL: req.params.id, 
+  const templateVars = {
+    shortURL: req.params.id,
     longURL: urlDatabase[req.params.id],
     operation: 'Update',
     username: req.cookies.username
-   };
+  };
   res.render('urls_new', templateVars);
 })
 
@@ -93,6 +94,28 @@ router.post('/login', (req, res) => {
 // And signing out
 router.post('/logout', (req, res) => {
   res.clearCookie('username');
+  res.redirect('/urls');
+})
+
+// User registration, with actual passwords:
+router.get('/register', (req, res) => {
+  templateVars = {
+    username: req.cookies.username
+  }
+  res.render('register.ejs', templateVars);
+})
+
+router.post('/register', (req, res) => {
+  let userID = '';
+  do {
+    userID = generateRandomString();
+  } while (Object.keys(users).includes(userID)); // Avoids duplicates
+  users[userID] = {
+    email: req.body.email,
+    password: req.body.password
+  };
+  console.log('New user record is: ' + inspect(users[userID]));
+  res.cookie('user_id', userID);
   res.redirect('/urls');
 })
 

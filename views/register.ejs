@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('./partials/_head.ejs'); %>
+</head>
+
+<body>
+  <%- include('./partials/_header.ejs'); %>
+  <h1>So you wanna register a new account, eh?</h1>
+  <h5>You've come to the right place.</h5>
+  <form class="form-inline" action="/register" method="POST">
+    <label for="email">Email: </label>
+    <input class="form-control" name="email" type="text">
+    <label for="password">Password: </label>
+    <input class="form-control" name="password" type="text">
+    <input class="btn btn-primary" type="submit" value="Create Account">
+  </form>
+</body>
+<footer>
+  <%- include('./partials/_footer.ejs'); %>
+</footer>
+
+</html>
