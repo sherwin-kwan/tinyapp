@@ -104,7 +104,7 @@ dist
 .tern-port
 
 # Test Files
-bcrypt-test.js
+legacy
 
 # Confidential
 secret-key.js

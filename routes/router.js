@@ -5,6 +5,7 @@ const cookieSession = require('cookie-session');
 // Import the database of URLs
 const urlDatabase = require('../data/urlDatabase.js');
 const users = require('../data/usersDatabase.js');
+const { adminID } = require('../constants');
 // Import functions for POST requests
 const { generateRandomString, getUsersName, filterUrlDatabase } = require('../helperFunctions.js');
 const inspect = require('util').inspect;
@@ -23,7 +24,7 @@ const defaultTemplateVars = (userID) => {
   const def = {
     operation: 'Placeholder',
     userID: userID,
-    userName: getUsersName(userID),
+    userName: getUsersName(userID, users),
     message: 'Placeholder'
   };
   const notLoggedIn = {
@@ -46,7 +47,7 @@ router.get('/urls/create', (req, res) => {
   let templateVars = defaultTemplateVars(req.session.userID);
   if (req.session.userID) {
     templateVars.operation = 'Create';
-    res.render("urls_new", templateVars);
+    res.render("urls_createOrEdit", templateVars);
   } else {
     // When user isn't logged in, they are given an error page and asked to log in or register.
     templateVars.message = 'Please log in before creating a new shortened URL.';
@@ -78,7 +79,7 @@ router.post('/urls/create', (req, res) => {
 // READ (BROWSE) all URLs
 router.get('/urls', (req, res) => {
   let templateVars = defaultTemplateVars(req.session.userID);
-  templateVars.urlDatabase = filterUrlDatabase(req.session.userID);
+  templateVars.urlDatabase = filterUrlDatabase(req.session.userID, urlDatabase, adminID);
   if (req.session.userID) {
     Object.assign(templateVars, {
       operation: 'Browse',
@@ -130,7 +131,7 @@ router.get('/url/edit/:id', (req, res) => {
         longURL: document.longURL,
         operation: 'Update',
       });
-      res.render('urls_new', templateVars);
+      res.render('urls_createOrEdit', templateVars);
       break;
     default:
       templateVars.message = 'You can only update details for URLs that you created.';
@@ -189,7 +190,7 @@ router.get('/error', (req, res) => {
   const templateVars = {
     operation: 'Error',
     userID: req.session.userID || null,
-    userName: getUsersName(req.session.userID),
+    userName: getUsersName(req.session.userID, users),
     message: null
   };
   res.render('error.ejs', templateVars);

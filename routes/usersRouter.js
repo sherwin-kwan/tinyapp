@@ -25,7 +25,7 @@ router.get('/login', (req, res) => {
 });
 
 router.post('/login', (req, res) => {
-  const userID = findUserByEmail(req.body.email);
+  const userID = findUserByEmail(req.body.email, users);
   if (!userID) {
     res.status(403).send(`This user doesn't exist. Nice try, hacker!`);
     return;
@@ -60,7 +60,7 @@ router.get('/register', (req, res) => {
 });
 
 router.post('/register', (req, res) => {
-  const seeIfUserExists = findUserByEmail(req.body.email);
+  const seeIfUserExists = findUserByEmail(req.body.email, users);
   // Handles the case where a user attempts to register with an email that already has an account
   if (seeIfUserExists) {
     res.status(400).send(`<html>Welcome back, ${users[seeIfUserExists].name}, you actually already have an account. <a href="/users/login">Sign in</a></html>?`);
