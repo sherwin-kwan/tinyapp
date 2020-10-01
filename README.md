@@ -29,6 +29,18 @@ Version | Release Date | Notes
   * assign a secret key of your own choice into a variable, and *module.exports* it
   * If you are planning to upload source code, remember to put the secret key file in *.gitignore* to avoid leaking secret keys onto the Internet
 * By default, this application runs on port 4001. If you wish to use a different port, change the constant *PORT* in *espress-server.js*
+* Remember to download Node dependencies with *npm install*
+* In case the *package.json* file is not working properly, this is a list of the dependencies for this project:
+  * bcrypt
+  * body-parser
+  * cookie-session
+  * ejs
+  * express
+  * mocha (for testing only)
+  * chai (for testing only)
+* Other dependencies you may find helpful:
+  * morgan
+  * nodemon
 
 
 ## Routes
