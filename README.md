@@ -36,3 +36,7 @@ GET | /users/register | Retrieve new user registration page
 POST | /users/register | Submit details to register a new user
 POST | /users/logout | Log out
 
+
+## Copyright
+
+(C) 2020 Sherwin Kwan. This is open-source software released under a permissive license (see */LICENSE* file), which means you can't be sued for copying this code and using it in your own apps. I just wouldn't recommend it though, I made this in a few days and it's not exactly made to best practices. NO WARRANTY, PROVIDED AS-IS, blah blah blah
