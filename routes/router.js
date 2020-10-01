@@ -9,6 +9,12 @@ const users = require('../data/usersDatabase.js');
 const { generateRandomString, getUsersName, filterUrlDatabase } = require('../helperFunctions.js');
 const inspect = require('util').inspect;
 
+// Setting up a cookie session
+router.use(cookieSession({
+  name: 'session',
+  keys: ['abcde'],
+  maxAge: 10000 // expires after 2 minutes
+}));
 
 // Making code DRY - this global variable saves the default template variables passed to EJS
 // If no req is passed, 
@@ -67,7 +73,6 @@ router.post('/urls/new', (req, res) => {
 
 // READ (BROWSE) all URLs
 router.get('/urls', (req, res) => {
-  console.log('req.session is: ' + inspect(req.session));
   let templateVars = defaultTemplateVars(req.session.userID);
   templateVars.urlDatabase = filterUrlDatabase(req.session.userID);
   if (req.session.userID) {
