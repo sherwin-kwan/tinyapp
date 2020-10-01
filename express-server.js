@@ -12,7 +12,6 @@ const { PORT } = require('./constants');
 app.set('view engine', 'ejs');
 const router = require('./routes/router.js');
 const usersRouter = require('./routes/usersRouter.js');
-// const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
 const morgan = require('morgan');
 

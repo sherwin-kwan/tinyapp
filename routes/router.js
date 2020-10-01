@@ -7,7 +7,6 @@ const users = require('../data/usersDatabase.js');
 const { adminID } = require('../constants');
 // Import functions for POST requests
 const { generateRandomString, getUsersName, filterUrlDatabase } = require('../helperFunctions.js');
-// const inspect = require('util').inspect;
 const mySecretKey = require('../secret-key');
 
 // Setting up a cookie session
