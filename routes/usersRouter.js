@@ -1,6 +1,7 @@
 // This router handles all pages involving users logging in and out or registering a new account.
 
 const express = require('express');
+const bcrypt = require('bcrypt');
 const router = express.Router();
 // Import the database of URLs
 const users = require('../data/usersDatabase.js');
@@ -29,7 +30,7 @@ router.post('/login', (req, res) => {
     res.status(403).send(`This user doesn't exist. Nice try, hacker!`);
     return;
   }
-  if (users[userID].password !== req.body.password) {
+  if (!bcrypt.compareSync(req.body.password, users[userID].password)) {
     res.status(403).send('You got the wrong password. Nice try, hacker!');
     return;
   }
@@ -77,7 +78,7 @@ router.post('/register', (req, res) => {
   users[userID] = {
     name: req.body.name,
     email: req.body.email,
-    password: req.body.password
+    password: bcrypt.hashSync(req.body.password)
   };
   console.log('New user record is: ' + inspect(users[userID]));
   res.cookie('userID', userID);
