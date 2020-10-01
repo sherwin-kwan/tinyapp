@@ -1,5 +1,4 @@
 const express = require('express');
-const app = express();
 const router = express.Router();
 const cookieSession = require('cookie-session');
 // Import the database of URLs
@@ -8,7 +7,7 @@ const users = require('../data/usersDatabase.js');
 const { adminID } = require('../constants');
 // Import functions for POST requests
 const { generateRandomString, getUsersName, filterUrlDatabase } = require('../helperFunctions.js');
-const inspect = require('util').inspect;
+// const inspect = require('util').inspect;
 const mySecretKey = require('../secret-key');
 
 // Setting up a cookie session
@@ -19,7 +18,7 @@ router.use(cookieSession({
 }));
 
 // Making code DRY - this global variable saves the default template variables passed to EJS
-// If no req is passed, 
+// If no req is passed, then the userID and username are set to null before passing to the EJS templates
 const defaultTemplateVars = (userID) => {
   const def = {
     operation: 'Placeholder',
@@ -34,7 +33,7 @@ const defaultTemplateVars = (userID) => {
     message: 'Placeholder'
   };
   return (userID) ? def : notLoggedIn;
-}
+};
 
 /// HOMEPAGE ///
 
@@ -62,7 +61,7 @@ router.post('/urls/create', (req, res) => {
     templateVars.message = 'Please log in before creating a new shortened URL.';
     res.render('error', templateVars);
     return;
-  };
+  }
   let randomShortURL;
   do {
     randomShortURL = generateRandomString();
@@ -102,18 +101,18 @@ router.get('/url/:id', (req, res) => {
   // (i.e. was the creator of this URL, or is admin)
   let document = urlDatabase[req.params.id];
   switch (req.session.userID) {
-    case document.userID:
-    case 'daroot':
-      Object.assign(templateVars, {
-        shortURL: req.params.id,
-        longURL: document.longURL,
-        operation: 'Read'
-      });
-      res.render('urls_detail', templateVars);
-      break;
-    default:
-      templateVars.message = 'You can only view details for URLs that you created.';
-      res.render('error', templateVars);
+  case document.userID:
+  case 'daroot':
+    Object.assign(templateVars, {
+      shortURL: req.params.id,
+      longURL: document.longURL,
+      operation: 'Read'
+    });
+    res.render('urls_detail', templateVars);
+    break;
+  default:
+    templateVars.message = 'You can only view details for URLs that you created.';
+    res.render('error', templateVars);
   }
 });
 
@@ -124,18 +123,18 @@ router.get('/url/edit/:id', (req, res) => {
   // (i.e. was the creator of this URL, or is admin)
   let document = urlDatabase[req.params.id];
   switch (req.session.userID) {
-    case document.userID:
-    case 'daroot':
-      Object.assign(templateVars, {
-        shortURL: req.params.id,
-        longURL: document.longURL,
-        operation: 'Update',
-      });
-      res.render('urls_createOrEdit', templateVars);
-      break;
-    default:
-      templateVars.message = 'You can only update details for URLs that you created.';
-      res.render('error', templateVars);
+  case document.userID:
+  case 'daroot':
+    Object.assign(templateVars, {
+      shortURL: req.params.id,
+      longURL: document.longURL,
+      operation: 'Update',
+    });
+    res.render('urls_createOrEdit', templateVars);
+    break;
+  default:
+    templateVars.message = 'You can only update details for URLs that you created.';
+    res.render('error', templateVars);
   }
 });
 
@@ -145,14 +144,14 @@ router.post('/url/edit/:id', (req, res) => {
   // (i.e. was the creator of this URL, or is admin)
   let document = urlDatabase[req.params.id]; // This should be a pointer, so modifying 'document' modifies the actual document in the database
   switch (req.session.userID) {
-    case document.userID:
-    case 'daroot':
-      document.longURL = req.body.longURL;
-      res.redirect(`/url/${req.params.id}`);
-      break;
-    default:
-      templateVars.message = 'You can only update details for URLs that you created.';
-      res.render('error', templateVars);
+  case document.userID:
+  case 'daroot':
+    document.longURL = req.body.longURL;
+    res.redirect(`/url/${req.params.id}`);
+    break;
+  default:
+    templateVars.message = 'You can only update details for URLs that you created.';
+    res.render('error', templateVars);
   }
 });
 
@@ -163,14 +162,14 @@ router.post('/delete/:id', (req, res) => {
   // (i.e. was the creator of this URL, or is admin)
   let document = urlDatabase[req.params.id]; // This should be a pointer, so modifying 'document' modifies the actual document in the database
   switch (req.session.userID) {
-    case document.userID:
-    case 'daroot':
-      delete urlDatabase[req.params.id];
-      res.redirect(`/urls`);
-      break;
-    default:
-      templateVars.message = 'You can only delete URLs that you created.';
-      res.render('error', templateVars);
+  case document.userID:
+  case 'daroot':
+    delete urlDatabase[req.params.id];
+    res.redirect(`/urls`);
+    break;
+  default:
+    templateVars.message = 'You can only delete URLs that you created.';
+    res.render('error', templateVars);
   }
 });
 
@@ -194,7 +193,7 @@ router.get('/error', (req, res) => {
     message: null
   };
   res.render('error.ejs', templateVars);
-})
+});
 
 
 

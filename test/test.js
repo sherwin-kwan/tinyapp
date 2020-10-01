@@ -14,7 +14,7 @@ describe('finding user ID given an email', () => {
   }),
   it(`returns false if the email is not found in database`, () => {
     assert.isFalse(findUserByEmail('abc@abc.com', users));
-  })
+  });
 });
 
 describe('finding a name given a user ID', () => {
@@ -26,7 +26,7 @@ describe('finding a name given a user ID', () => {
   }),
   it(`returns with the name Jill when Jill's ID is entered`, () => {
     assert.equal(getUsersName('bcdefg', users), 'Jill');
-  })
+  });
 });
 
 describe('generating random strings', () => {
@@ -38,8 +38,8 @@ describe('generating random strings', () => {
   }),
   it(`works a third time`, () => {
     assert.match(generateRandomString(), /\w{6}/, 'regexp matches');
-  })
-})
+  });
+});
 
 describe('filtering URL database', () => {
   it(`Returns an object`, () => {
@@ -52,12 +52,12 @@ describe('filtering URL database', () => {
     assert.doesNotHaveAnyKeys(filterUrlDatabase('abcdef', urlDatabase, adminID), ['9sm5xK']);
   }),
   it(`Admin can access everyone's URLs`, () => {
-    assert.containsAllKeys(filterUrlDatabase(adminID, urlDatabase, adminID), ['b2xVn2', '9sm5xK'])
+    assert.containsAllKeys(filterUrlDatabase(adminID, urlDatabase, adminID), ['b2xVn2', '9sm5xK']);
   }),
   it(`No ID, no access to data`, () => {
     assert.isEmpty(filterUrlDatabase('', urlDatabase, adminID));
   }),
   it(`Bad ID, no access to data`, () => {
     assert.isEmpty(filterUrlDatabase('23fs.djfhbgi8y3bt', urlDatabase, adminID));
-  })
-})
+  });
+});
