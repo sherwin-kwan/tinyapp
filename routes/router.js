@@ -42,7 +42,7 @@ router.get('/', (req, res) => {
 });
 
 // CREATE new URLs - only for logged-in users
-router.get('/urls/new', (req, res) => {
+router.get('/urls/create', (req, res) => {
   let templateVars = defaultTemplateVars(req.session.userID);
   if (req.session.userID) {
     templateVars.operation = 'Create';
@@ -55,7 +55,7 @@ router.get('/urls/new', (req, res) => {
   }
 });
 
-router.post('/urls/new', (req, res) => {
+router.post('/urls/create', (req, res) => {
   if (!req.session.userID) {
     let templateVars = defaultTemplateVars();
     templateVars.message = 'Please log in before creating a new shortened URL.';
@@ -117,7 +117,7 @@ router.get('/url/:id', (req, res) => {
 });
 
 // UPDATE URLs
-router.get('/edit/:id', (req, res) => {
+router.get('/url/edit/:id', (req, res) => {
   let templateVars = defaultTemplateVars(req.session.userID);
   // Check to make sure the current user has access to the requested document in the database
   // (i.e. was the creator of this URL, or is admin)
@@ -138,7 +138,7 @@ router.get('/edit/:id', (req, res) => {
   }
 });
 
-router.post('/edit/:id', (req, res) => {
+router.post('/url/edit/:id', (req, res) => {
   let templateVars = defaultTemplateVars(req.session.userID);
   // Check to make sure the current user has access to the requested document in the database
   // (i.e. was the creator of this URL, or is admin)

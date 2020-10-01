@@ -15,7 +15,7 @@
   <main style="margin: 1em">
     <h3><%= operation %> TinyURL</h3>
     <!-- The form makes a POST request to a different route depending whether this is a Create or an Edit -->
-    <form class="form-inline" action="<%= (operation === 'Update') ? `/edit/${shortURL}` : "/urls/new"; %>" method="POST">
+    <form class="form-inline" action="<%= (operation === 'Update') ? `/url/edit/${shortURL}` : "/urls/new"; %>" method="POST">
       <div class="form-group mb-2">
         <label for="longURL"><%= (operation === 'Update') ? `Assign ${shortURL} to a new URL` : 'Enter URL'; %> (remember the http(s):// prefix!)</label>
         <input class="form-control" type="text" name="longURL" style="width: 300px; margin: 1em"

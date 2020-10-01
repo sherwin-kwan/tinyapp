@@ -1,3 +1,12 @@
+/* Remaining issues
+
+1) CSS not working
+2) Need Mocha/Chai tests
+3) Hiding password text
+4) Following user stories
+
+*/
+
 const express = require('express');
 const app = express();
 
