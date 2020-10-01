@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 
-const PORT = 8080;
+const PORT = 4001;
 app.set('view engine', 'ejs');
 const router = require('./routes/router.js');
 const usersRouter = require('./routes/usersRouter.js');
@@ -12,7 +12,7 @@ const morgan = require('morgan');
 const bodyParser = require("body-parser");
 // Creating the server
 app.listen(PORT, () => {
-  console.log('Listening on port 8080!');
+  console.log('Listening on port 4001!');
 });
 
 // Body parser so Buffers can be read as Strings

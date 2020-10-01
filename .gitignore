@@ -105,3 +105,6 @@ dist
 
 # Test Files
 bcrypt-test.js
+
+# Confidential
+secret-key.js

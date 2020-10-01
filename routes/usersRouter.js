@@ -41,7 +41,7 @@ router.post('/login', (req, res) => {
 
 // And signing out
 router.post('/logout', (req, res) => {
-  res.clearCookie('userID');
+  req.session = null; // Clears the session cookie
   res.redirect('/urls');
 });
 

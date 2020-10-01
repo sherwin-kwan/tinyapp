@@ -8,12 +8,13 @@ const users = require('../data/usersDatabase.js');
 // Import functions for POST requests
 const { generateRandomString, getUsersName, filterUrlDatabase } = require('../helperFunctions.js');
 const inspect = require('util').inspect;
+const mySecretKey = require('../secret-key');
 
 // Setting up a cookie session
 router.use(cookieSession({
   name: 'session',
-  keys: ['abcde'],
-  maxAge: 10000 // expires after 2 minutes
+  keys: [mySecretKey],
+  maxAge: 3600000 // expires after 1 hour
 }));
 
 // Making code DRY - this global variable saves the default template variables passed to EJS
@@ -61,12 +62,15 @@ router.post('/urls/new', (req, res) => {
     res.render('error', templateVars);
     return;
   };
-  const longURL = req.body.longURL;
   let randomShortURL;
   do {
     randomShortURL = generateRandomString();
   } while (Object.keys(urlDatabase).includes(randomShortURL)); // Avoids duplicates
-  urlDatabase[randomShortURL].longURL = longURL;
+  console.log('data is: ', urlDatabase, randomShortURL, urlDatabase[randomShortURL]);
+  urlDatabase[randomShortURL] = {
+    userID: req.session.userID,
+    longURL: req.body.longURL
+  };
   console.log(urlDatabase);
   res.redirect(`/url/${randomShortURL}`);
 });
