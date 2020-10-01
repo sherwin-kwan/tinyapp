@@ -1,3 +1,5 @@
+const users = require('./data/usersDatabase');
+
 const generateRandomString = () => {
   return Math.random().toString(36).slice(2, 8);
 };
@@ -38,9 +40,22 @@ const getUsersName = (id, db) => {
   return (db[id]) ? db[id].name : null;
 };
 
-// // TEST
-// for (let i = 0; i < 10; i++) {
-//   console.log(generateRandomString());
-// }
+// Making code DRY - this global variable saves the default template variables passed to EJS
+// If no req is passed, then the userID and username are set to null before passing to the EJS templates
+const defaultTemplateVars = (userID) => {
+  const def = {
+    operation: 'Placeholder',
+    userID: userID,
+    userName: getUsersName(userID, users),
+    message: 'Placeholder'
+  };
+  const notLoggedIn = {
+    operation: 'Not logged in',
+    userID: null,
+    userName: null,
+    message: 'Placeholder'
+  };
+  return (userID) ? def : notLoggedIn;
+};
 
-module.exports = { generateRandomString, getUsersName, filterUrlDatabase, findUserByEmail };
+module.exports = { generateRandomString, getUsersName, filterUrlDatabase, findUserByEmail, defaultTemplateVars };

@@ -6,32 +6,31 @@ const router = express.Router();
 // Import the database of URLs
 const users = require('../data/usersDatabase.js');
 // Import functions for POST requests
-const { generateRandomString, findUserByEmail } = require('../helperFunctions.js');
-const inspect = require('util').inspect;
+const { generateRandomString, findUserByEmail, defaultTemplateVars } = require('../helperFunctions.js');
 
-// Let's make some yummy, delicious delicacies!
-
+// Login GET route
 router.get('/login', (req, res) => {
   if (req.session.userID) {
     res.send('<html>You are already logged in. Return to <a href="/urls">homepage</a></html>?');
   } else {
-    const templateVars = {
-      operation: 'Login',
-      userID: null,
-      userName: null
-    };
+    templateVars = defaultTemplateVars();
+    templateVars.operation = 'Login';
     res.render('userHandling.ejs', templateVars);
   }
 });
 
+// Submit the login form
 router.post('/login', (req, res) => {
   const userID = findUserByEmail(req.body.email, users);
   if (!userID) {
-    res.status(403).send(`This user doesn't exist. Nice try, hacker!`);
+    const templateVars = defaultTemplateVars();
+    templateVars.message = `This user doesn't exist. Nice try, hacker!`;
+    res.status(403).render('error', templateVars);
     return;
   }
   if (!bcrypt.compareSync(req.body.password, users[userID].password)) {
-    res.status(403).send('You got the wrong password. Nice try, hacker!');
+    templateVars.message = `You got the wrong password. Nice try, hacker!`;
+    res.status(403).render('error', templateVars);
     return;
   }
   req.session.userID = userID;
@@ -50,11 +49,8 @@ router.get('/register', (req, res) => {
   if (req.session.userID) {
     res.send('<html>You are already logged in. Return to <a href="/urls">homepage</a></html>?');
   } else {
-    const templateVars = {
-      operation: 'Register',
-      userID: null,
-      userName: null
-    };
+    templateVars = defaultTemplateVars();
+    templateVars.operation = 'Register';
     res.render('userHandling.ejs', templateVars);
   }
 });
@@ -72,18 +68,17 @@ router.post('/register', (req, res) => {
     return;
   }
   let userID = '';
+  // Generate a random user ID, and make sure to avoid duplicates (in case of the one-in-a-million chance it's already used)
   do {
     userID = generateRandomString();
-  } while (Object.keys(users).includes(userID)); // Avoids duplicates
+  } while (Object.keys(users).includes(userID));
   users[userID] = {
     name: req.body.name,
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password, 8)
   };
-  console.log('New user record is: ' + inspect(users));
   req.session.userID = userID;
   res.redirect('/urls');
 });
-
 
 module.exports = router;

@@ -9,14 +9,17 @@
 
 <body>
   <%- include('./partials/_header.ejs'); %>
-  <h2>Oops ...</h2>
-  <section id="message" class="errorMessage"><%= (message) ? message : 'Something went wrong.'; %><br>
-    <a href="https://github.com/sherwin-kwan/tinyapp/issues">Report a bug?</a>
-  </section>
-  <div <% if (userID)  { %> style="display: none" <% } %> >
-    <a class="btn btn-primary" href="/users/register">Register</a>
-    <a class="btn btn-primary" href="/users/login">Sign In</a>
-  </div>
+  <main>
+    <h2>Oops ...</h2>
+    <p id="message" class="errorMessage"><%= (message) ? message : 'Something went wrong.'; %></p>
+    <p>
+      <a href="https://github.com/sherwin-kwan/tinyapp/issues">Report a bug?</a>
+    </p>
+    <div <% if (userID)  { %> style="display: none" <% } %>>
+      <a class="btn btn-primary" href="/users/register">Register</a>
+      <a class="btn btn-primary" href="/users/login">Sign In</a>
+    </div>
+  </main>
 </body>
 <footer>
   <%- include('./partials/_footer.ejs'); %>

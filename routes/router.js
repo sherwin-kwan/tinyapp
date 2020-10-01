@@ -6,33 +6,8 @@ const urlDatabase = require('../data/urlDatabase.js');
 const users = require('../data/usersDatabase.js');
 const { adminID } = require('../constants');
 // Import functions for POST requests
-const { generateRandomString, getUsersName, filterUrlDatabase } = require('../helperFunctions.js');
-const mySecretKey = require('../secret-key');
-
-// Setting up a cookie session
-router.use(cookieSession({
-  name: 'session',
-  keys: [mySecretKey],
-  maxAge: 3600000 // expires after 1 hour
-}));
-
-// Making code DRY - this global variable saves the default template variables passed to EJS
-// If no req is passed, then the userID and username are set to null before passing to the EJS templates
-const defaultTemplateVars = (userID) => {
-  const def = {
-    operation: 'Placeholder',
-    userID: userID,
-    userName: getUsersName(userID, users),
-    message: 'Placeholder'
-  };
-  const notLoggedIn = {
-    operation: 'Not logged in',
-    userID: null,
-    userName: null,
-    message: 'Placeholder'
-  };
-  return (userID) ? def : notLoggedIn;
-};
+const { generateRandomString, getUsersName, defaultTemplateVars, filterUrlDatabase } = require('../helperFunctions.js');
+const inspect = require('util').inspect;
 
 /// HOMEPAGE ///
 
@@ -74,6 +49,7 @@ router.post('/urls/create', (req, res) => {
 
 // READ (BROWSE) all URLs
 router.get('/urls', (req, res) => {
+  console.log(req.session.userID, ' NOW ITS THIS');
   let templateVars = defaultTemplateVars(req.session.userID);
   const filtered = filterUrlDatabase(req.session.userID, urlDatabase, adminID);
   // Inserts a name property into the filtered data (this would normally be done in other ways with real SQL)
@@ -186,17 +162,13 @@ router.get('/urls.json', (req, res) => {
   res.json(urlDatabase);
 });
 
-// A generic page to catch errors
-router.get('/error', (req, res) => {
-  const templateVars = {
-    operation: 'Error',
-    userID: req.session.userID || null,
-    userName: getUsersName(req.session.userID, users),
-    message: null
-  };
+// Handling error paths
+
+router.use((req, res) => {
+  res.status(404).render('error');
+  const templateVars = defaultTemplateVars(req.session.userID);
+  templateVars.message = `The page you're looking for could not be found.`
   res.render('error.ejs', templateVars);
 });
-
-
 
 module.exports = router;

@@ -14,6 +14,7 @@ const router = require('./routes/router.js');
 const usersRouter = require('./routes/usersRouter.js');
 const cookieSession = require('cookie-session');
 const morgan = require('morgan');
+const mySecretKey = require('./secret-key');
 const path = require('path');
 
 const bodyParser = require("body-parser");
@@ -31,16 +32,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Output request log to console
 morgan('tiny');
 
-// Routes
-app.use('/', router);
-app.use('/users/', usersRouter);
-
 // Cookies are delicious delicacies  https://www.squarefree.com/extensions/delicious-delicacies/delicious-1.5.png
-
 app.use(cookieSession({
   name: 'session',
-  keys: ['abcde'],
-  maxAge: 120000 // expires after 2 minutes
+  keys: [mySecretKey],
+  maxAge: 3600000 // expires after 1 hour
 }));
+
+// Routes
+app.use('/users/', usersRouter);
+app.use(router);
+
 
 module.exports = { express, app };

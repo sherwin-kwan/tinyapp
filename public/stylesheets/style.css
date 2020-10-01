@@ -59,3 +59,13 @@ tbody tr:nth-child(even) {
   vertical-align: middle;
   color: #007bff;
 }
+
+.inline-links {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+p.errorMessage {
+  color: red;
+  font-size: 1.5em
+}
