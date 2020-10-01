@@ -14,6 +14,7 @@ const router = require('./routes/router.js');
 const usersRouter = require('./routes/usersRouter.js');
 const cookieSession = require('cookie-session');
 const morgan = require('morgan');
+const path = require('path');
 
 const bodyParser = require("body-parser");
 // Creating the server
@@ -25,7 +26,7 @@ app.listen(PORT, () => {
 app.use(bodyParser.urlencoded({extended: true}));
 
 // Stylesheets
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Output request log to console
 morgan('tiny');

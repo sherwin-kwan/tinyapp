@@ -155,7 +155,7 @@ router.post('/url/edit/:id', (req, res) => {
 });
 
 // DELETE URLs
-router.post('/delete/:id', (req, res) => {
+router.post('/url/delete/:id', (req, res) => {
   let templateVars = defaultTemplateVars(req.session.userID);
   // Check to make sure the current user has access to the requested document in the database
   // (i.e. was the creator of this URL, or is admin)

@@ -30,13 +30,14 @@ Version | Release Date | Notes
 
 Method|URL|Operation
 ---|---|---
+GET | / | Redirects to /urls
 GET | /urls/create | Retrieve form to create a new short URL 
 POST | /urls/create | Submit form to create a new short URL 
 GET | /urls | Browse through all short URLs
 GET | /url/:id | Read details for a single short URL
 GET | /url/edit/:id | Retrieve form to edit an existing short URL
 POST | /url/edit/:id | Submit form to edit an existing short URL
-POST | /delete/:id | Permanently delete a short URL
+POST | /url/delete/:id | Permanently delete a short URL
 GET | /users/login | Retrieve login page
 POST | /users/login | Log in
 GET | /users/register | Retrieve new user registration page
