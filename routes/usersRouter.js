@@ -9,10 +9,10 @@ const users = require('../data/usersDatabase.js');
 const { generateRandomString, findUserByEmail } = require('../helperFunctions.js');
 const inspect = require('util').inspect;
 
-// Let's make some yummy, delicious delicacies! https://www.squarefree.com/extensions/delicious-delicacies/delicious-1.5.png
+// Let's make some yummy, delicious delicacies!
 
 router.get('/login', (req, res) => {
-  if (req.cookies.userID) {
+  if (req.session.userID) {
     res.send('<html>You are already logged in. Return to <a href="/urls">homepage</a></html>?');
   } else {
     const templateVars = {
@@ -34,7 +34,7 @@ router.post('/login', (req, res) => {
     res.status(403).send('You got the wrong password. Nice try, hacker!');
     return;
   }
-  res.cookie('userID', userID);
+  req.session.userID = userID;
   console.log('Delicious cookie just came hot out of the oven!');
   res.redirect('/urls');
 });
@@ -47,7 +47,7 @@ router.post('/logout', (req, res) => {
 
 // User registration, with actual passwords:
 router.get('/register', (req, res) => {
-  if (req.cookies.userID) {
+  if (req.session.userID) {
     res.send('<html>You are already logged in. Return to <a href="/urls">homepage</a></html>?');
   } else {
     const templateVars = {
@@ -78,10 +78,10 @@ router.post('/register', (req, res) => {
   users[userID] = {
     name: req.body.name,
     email: req.body.email,
-    password: bcrypt.hashSync(req.body.password)
+    password: bcrypt.hashSync(req.body.password, 8)
   };
-  console.log('New user record is: ' + inspect(users[userID]));
-  res.cookie('userID', userID);
+  console.log('New user record is: ' + inspect(users));
+  req.session.userID = userID;
   res.redirect('/urls');
 });
 

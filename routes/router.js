@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 console.log('app is: ' + app);
 const router = express.Router();
-const cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
 // Import the database of URLs
 const urlDatabase = require('../data/urlDatabase.js');
 const users = require('../data/usersDatabase.js');
@@ -11,7 +11,6 @@ const { generateRandomString, getUsersName, filterUrlDatabase } = require('../he
 const inspect = require('util').inspect;
 
 console.log(app);
-app.use(cookieParser());
 
 // Making code DRY - this global variable saves the default template variables passed to EJS
 // If no req is passed, 
@@ -39,8 +38,8 @@ router.get('/', (req, res) => {
 
 // CREATE new URLs - only for logged-in users
 router.get('/urls/new', (req, res) => {
-  let templateVars = defaultTemplateVars(req.cookies.userID);
-  if (req.cookies.userID) {
+  let templateVars = defaultTemplateVars(req.session.userID);
+  if (req.session.userID) {
     templateVars.operation = 'Create';
     res.render("urls_new", templateVars);
   } else {
@@ -52,7 +51,7 @@ router.get('/urls/new', (req, res) => {
 });
 
 router.post('/urls/new', (req, res) => {
-  if (!req.cookies.userID) {
+  if (!req.session.userID) {
     let templateVars = defaultTemplateVars();
     templateVars.message = 'Please log in before creating a new shortened URL.';
     res.render('error', templateVars);
@@ -70,10 +69,10 @@ router.post('/urls/new', (req, res) => {
 
 // READ (BROWSE) all URLs
 router.get('/urls', (req, res) => {
-  console.log(inspect(req.cookies));
-  let templateVars = defaultTemplateVars(req.cookies.userID);
-  templateVars.urlDatabase = filterUrlDatabase(req.cookies.userID);
-  if (req.cookies.userID) {
+  console.log(inspect(req.session));
+  let templateVars = defaultTemplateVars(req.session.userID);
+  templateVars.urlDatabase = filterUrlDatabase(req.session.userID);
+  if (req.session.userID) {
     Object.assign(templateVars, {
       operation: 'Browse',
       message: `Behold, all the shortened URLs you've created are listed below!`
@@ -90,11 +89,11 @@ router.get('/urls', (req, res) => {
 
 // READ a single URL document in the database
 router.get('/url/:id', (req, res) => {
-  let templateVars = defaultTemplateVars(req.cookies.userID);
+  let templateVars = defaultTemplateVars(req.session.userID);
   // Check to make sure the current user has access to the requested document in the database
   // (i.e. was the creator of this URL, or is admin)
   let document = urlDatabase[req.params.id];
-  switch (req.cookies.userID) {
+  switch (req.session.userID) {
     case document.userID:
     case 'daroot':
       Object.assign(templateVars, {
@@ -112,11 +111,11 @@ router.get('/url/:id', (req, res) => {
 
 // UPDATE URLs
 router.get('/edit/:id', (req, res) => {
-  let templateVars = defaultTemplateVars(req.cookies.userID);
+  let templateVars = defaultTemplateVars(req.session.userID);
   // Check to make sure the current user has access to the requested document in the database
   // (i.e. was the creator of this URL, or is admin)
   let document = urlDatabase[req.params.id];
-  switch (req.cookies.userID) {
+  switch (req.session.userID) {
     case document.userID:
     case 'daroot':
       Object.assign(templateVars, {
@@ -133,11 +132,11 @@ router.get('/edit/:id', (req, res) => {
 });
 
 router.post('/edit/:id', (req, res) => {
-  let templateVars = defaultTemplateVars(req.cookies.userID);
+  let templateVars = defaultTemplateVars(req.session.userID);
   // Check to make sure the current user has access to the requested document in the database
   // (i.e. was the creator of this URL, or is admin)
   let document = urlDatabase[req.params.id]; // This should be a pointer, so modifying 'document' modifies the actual document in the database
-  switch (req.cookies.userID) {
+  switch (req.session.userID) {
     case document.userID:
     case 'daroot':
       document.longURL = req.body.longURL;
@@ -151,11 +150,11 @@ router.post('/edit/:id', (req, res) => {
 
 // DELETE URLs
 router.post('/delete/:id', (req, res) => {
-  let templateVars = defaultTemplateVars(req.cookies.userID);
+  let templateVars = defaultTemplateVars(req.session.userID);
   // Check to make sure the current user has access to the requested document in the database
   // (i.e. was the creator of this URL, or is admin)
   let document = urlDatabase[req.params.id]; // This should be a pointer, so modifying 'document' modifies the actual document in the database
-  switch (req.cookies.userID) {
+  switch (req.session.userID) {
     case document.userID:
     case 'daroot':
       delete urlDatabase[req.params.id];
@@ -182,11 +181,13 @@ router.get('/urls.json', (req, res) => {
 router.get('/error', (req, res) => {
   const templateVars = {
     operation: 'Error',
-    userID: req.cookies.userID || null,
-    userName: getUsersName(req.cookies.userID),
+    userID: req.session.userID || null,
+    userName: getUsersName(req.session.userID),
     message: null
   };
   res.render('error.ejs', templateVars);
 })
+
+
 
 module.exports = router;

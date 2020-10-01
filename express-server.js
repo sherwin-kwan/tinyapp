@@ -5,7 +5,8 @@ const PORT = 8080;
 app.set('view engine', 'ejs');
 const router = require('./routes/router.js');
 const usersRouter = require('./routes/usersRouter.js');
-const cookieParser = require('cookie-parser');
+// const cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
 const morgan = require('morgan');
 
 const bodyParser = require("body-parser");
@@ -17,9 +18,6 @@ app.listen(PORT, () => {
 // Body parser so Buffers can be read as Strings
 app.use(bodyParser.urlencoded({extended: true}));
 
-// Cookie parser to handle user cookies
-app.use(cookieParser());
-
 // Stylesheets
 app.use(express.static('public'));
 
@@ -29,5 +27,13 @@ morgan('tiny');
 // Routes
 app.use('/', router);
 app.use('/users/', usersRouter);
+
+// Cookies are delicious delicacies  https://www.squarefree.com/extensions/delicious-delicacies/delicious-1.5.png
+
+app.use(cookieSession({
+  name: 'session',
+  keys: ['abcde'],
+  maxAge: 120000 // expires after 2 minutes
+}));
 
 module.exports = { express, app };
