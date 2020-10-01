@@ -3,6 +3,12 @@
 body {
   font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
+main {
+  margin: 1em;
+}
+label {
+  display: block;
+}
 
 /* TABLES */
 

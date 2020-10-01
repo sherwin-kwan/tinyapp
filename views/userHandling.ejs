@@ -7,26 +7,27 @@
 
 <body>
   <%- include('./partials/_header.ejs'); %>
-  <h1>So you wanna <%= (operation === 'Register') ? 'register a new account' : 'log in'; %>, eh?</h1>
-  <h5>You've come to the right place.</h5>
-  <section id="passwordWarning">Warning, DO NOT use an actual password you use for other sites here. THIS IS FOR DEMONSTRATION PURPOSES ONLY.
-    PASSWORDS ARE STORED IN PLAIN TEXT AND ARE NOT SECURE!
-  </section>
-  <section id="switchFormat">
-    <%- (operation === 'Register') ? 'Already have an account? <a href="/users/login">Sign In!</a>' : `Don't have an account yet? <a href="/users/register">Register today!</a>` %>
-  </section>
-  <form action="<%= (operation === 'Register') ? '/users/register' : '/users/login'; %>" method="POST">
-    <div id="name-wrapper" <% if (operation === 'Login')  { %> style="display: none" <% } %> >
-      <label for="name">Name</label>
-      <input class="form-create" name="name" type="text">
-    </div>
-    <label for="email">Email: </label>
-    <input class="form-create" name="email" type="text">
-    <label for="password">Password: </label>
-    <input class="form-create" name="password" type="text">
-    <input class="btn btn-primary" type="submit"
-      value="<%= (operation === 'Register') ? 'Register New Account' : 'Sign In'; %>">
-  </form>
+  <main>
+    <h1>So you wanna <%= (operation === 'Register') ? 'register a new account' : 'log in'; %>, eh?</h1>
+    <h5>You've come to the right place.</h5>
+    <p id="passwordWarning">Warning, you might not want to use any passwords you use on other sites. I cannot guarantee you that this site is secure!
+    </p>
+    <p id="switchFormat">
+      <%- (operation === 'Register') ? 'Already have an account? <a href="/users/login">Sign In!</a>' : `Don't have an account yet? <a href="/users/register">Register today!</a>` %>
+    </p>
+    <form action="<%= (operation === 'Register') ? '/users/register' : '/users/login'; %>" method="POST">
+      <div id="name-wrapper" <% if (operation === 'Login')  { %> style="display: none" <% } %>>
+        <label for="name">Name:
+        <input class="form-create" name="name" type="text"></label>
+      </div>
+      <label for="email">Email: 
+      <input class="form-create" name="email" type="text"></label>
+      <label for="password">Password: 
+      <input class="form-create" name="password" type="text"></label>
+      <input class="btn btn-primary" type="submit"
+        value="<%= (operation === 'Register') ? 'Register New Account' : 'Sign In'; %>">
+    </form>
+  </main>
 </body>
 <footer>
   <%- include('./partials/_footer.ejs'); %>

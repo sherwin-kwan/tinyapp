@@ -65,19 +65,22 @@ router.post('/urls/create', (req, res) => {
   do {
     randomShortURL = generateRandomString();
   } while (Object.keys(urlDatabase).includes(randomShortURL)); // Avoids duplicates
-  console.log('data is: ', urlDatabase, randomShortURL, urlDatabase[randomShortURL]);
   urlDatabase[randomShortURL] = {
     userID: req.session.userID,
     longURL: req.body.longURL
   };
-  console.log(urlDatabase);
   res.redirect(`/url/${randomShortURL}`);
 });
 
 // READ (BROWSE) all URLs
 router.get('/urls', (req, res) => {
   let templateVars = defaultTemplateVars(req.session.userID);
-  templateVars.urlDatabase = filterUrlDatabase(req.session.userID, urlDatabase, adminID);
+  const filtered = filterUrlDatabase(req.session.userID, urlDatabase, adminID);
+  // Inserts a name property into the filtered data (this would normally be done in other ways with real SQL)
+  for (let shortURL in filtered) {
+    filtered[shortURL].userName = getUsersName(filtered[shortURL].userID, users);
+  };
+  templateVars.filtered = filtered;
   if (req.session.userID) {
     Object.assign(templateVars, {
       operation: 'Browse',

@@ -7,7 +7,7 @@
 
 <body>
   <%- include('./partials/_header.ejs'); %>
-  <main style="margin: 1em;">
+  <main>
     <h3>Welcome to Sherwin's Tinyapp!</h3>
     <p><%- message %></p>
     <h3>My URLs</h3>
@@ -22,11 +22,11 @@
         </tr>
       </thead>
       <tbody>
-        <% for(let url in urlDatabase) { %>
+        <% for(let url in filtered) { %>
         <tr>
           <td><a href="/url/<%= url %>"><%= url %></a></td>
-          <td><%= urlDatabase[url].longURL %></td>
-          <td><%= urlDatabase[url].userID %></td>
+          <td><%= filtered[url].longURL %></td>
+          <td><%= filtered[url].userName %></td>
           <td>
             <a href="/url/edit/<%= url %>">Edit</a>
           </td>
