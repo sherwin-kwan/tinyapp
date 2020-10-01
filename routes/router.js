@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const cookieSession = require('cookie-session');
 // Import the database of URLs
 const urlDatabase = require('../data/urlDatabase.js');
 const users = require('../data/usersDatabase.js');
@@ -55,7 +54,7 @@ router.get('/urls', (req, res) => {
   // Inserts a name property into the filtered data (this would normally be done in other ways with real SQL)
   for (let shortURL in filtered) {
     filtered[shortURL].userName = getUsersName(filtered[shortURL].userID, users);
-  };
+  }
   templateVars.filtered = filtered;
   if (req.session.userID) {
     Object.assign(templateVars, {
@@ -174,7 +173,7 @@ router.get('/u/:id', (req, res) => {
   } catch (err) {
     const templateVars = defaultTemplateVars();
     templateVars.message = 'This is an invalid shortURL link';
-    res.status(404).render('error', templateVars)
+    res.status(404).render('error', templateVars);
   }
   // Note: This only works if the http:// protocol is specified, otherwise it thinks it's a local file called google.ca!
 });
@@ -189,7 +188,7 @@ router.get('/urls.json', (req, res) => {
 router.use((req, res) => {
   res.status(404).render('error');
   const templateVars = defaultTemplateVars(req.session.userID);
-  templateVars.message = `The page you're looking for could not be found.`
+  templateVars.message = `The page you're looking for could not be found.`;
   res.render('error.ejs', templateVars);
 });
 

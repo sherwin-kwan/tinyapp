@@ -10,10 +10,11 @@ const { generateRandomString, findUserByEmail, defaultTemplateVars } = require('
 
 // Login GET route
 router.get('/login', (req, res) => {
+  let templateVars = defaultTemplateVars();
   if (req.session.userID) {
-    res.send('<html>You are already logged in. Return to <a href="/urls">homepage</a></html>?');
+    templateVars.message = 'You are already logged in. Return to <a href="/urls">homepage</a>?';
+    res.status(400).render('error', templateVars);
   } else {
-    templateVars = defaultTemplateVars();
     templateVars.operation = 'Login';
     res.render('userHandling.ejs', templateVars);
   }
@@ -22,8 +23,8 @@ router.get('/login', (req, res) => {
 // Submit the login form
 router.post('/login', (req, res) => {
   const userID = findUserByEmail(req.body.email, users);
+  const templateVars = defaultTemplateVars();
   if (!userID) {
-    const templateVars = defaultTemplateVars();
     templateVars.message = `This user doesn't exist. Nice try, hacker!`;
     res.status(403).render('error', templateVars);
     return;
@@ -46,10 +47,11 @@ router.post('/logout', (req, res) => {
 
 // User registration, with actual passwords:
 router.get('/register', (req, res) => {
+  let templateVars = defaultTemplateVars();
   if (req.session.userID) {
-    res.send('<html>You are already logged in. Return to <a href="/urls">homepage</a></html>?');
+    templateVars.message = 'You are already logged in. Return to <a href="/urls">homepage</a>?';
+    res.status(400).render('error', templateVars);
   } else {
-    templateVars = defaultTemplateVars();
     templateVars.operation = 'Register';
     res.render('userHandling.ejs', templateVars);
   }
