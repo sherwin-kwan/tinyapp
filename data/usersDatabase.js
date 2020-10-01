@@ -1,10 +1,9 @@
 const bcrypt = require('bcrypt');
-const hash1 = bcrypt.hashSync('hunter2', 8);
-const hash2 = bcrypt.hashSync('correct-horse', 8);
-const hash3 = bcrypt.hashSync('battery-staple', 8);
+const hash1 = '$2b$08$3j4fDnJ0yg1xfXkW3USBjOAS6CKwy7TIjP0.ROFLt0JgO4DtrHWgG';
+const hash2 = '$2b$08$P/AN381JlLr9sRgkRJiE/.9jAfsS09.mdZuA9ChLcMOWlBEaxXHou';
+const hash3 = '$2b$08$V3ZjqY9I7HEY2HNN/gFgYO7Jkl90GJ0mBBXHP1CdjfVsnnxa1aWwu';
 
-console.log(hash1, hash2, hash3);
-console.log(bcrypt.compareSync('hunter2', hash1));
+// FYI: Plain text passwords for these three people may be found in the release notes
 
 const users = {
   abcdef: {

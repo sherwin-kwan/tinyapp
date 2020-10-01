@@ -1,7 +1,6 @@
 /* Remaining issues
 
 1) CSS not working
-2) Need Mocha/Chai tests
 3) Hiding password text
 4) Following user stories
 
@@ -9,8 +8,7 @@
 
 const express = require('express');
 const app = express();
-
-const PORT = 4001;
+const { PORT } = require('constants');
 app.set('view engine', 'ejs');
 const router = require('./routes/router.js');
 const usersRouter = require('./routes/usersRouter.js');
