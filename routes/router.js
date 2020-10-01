@@ -24,7 +24,7 @@ router.get('/urls/create', (req, res) => {
   } else {
     // When user isn't logged in, they are given an error page and asked to log in or register.
     templateVars.message = 'Please log in before creating a new shortened URL.';
-    res.render('error', templateVars);
+    res.status(403).render('error', templateVars);
     return;
   }
 });
@@ -33,7 +33,7 @@ router.post('/urls/create', (req, res) => {
   if (!req.session.userID) {
     let templateVars = defaultTemplateVars();
     templateVars.message = 'Please log in before creating a new shortened URL.';
-    res.render('error', templateVars);
+    res.status(403).render('error', templateVars);
     return;
   }
   let randomShortURL;
@@ -78,9 +78,13 @@ router.get('/url/:id', (req, res) => {
   // Check to make sure the current user has access to the requested document in the database
   // (i.e. was the creator of this URL, or is admin)
   let document = urlDatabase[req.params.id];
+  if (!document) {
+    templateVars.message = 'This is an invalid shortURL ID';
+    res.status(404).render('error', templateVars);
+  }
   switch (req.session.userID) {
   case document.userID:
-  case 'daroot':
+  case adminID:
     Object.assign(templateVars, {
       shortURL: req.params.id,
       longURL: document.longURL,
@@ -90,7 +94,7 @@ router.get('/url/:id', (req, res) => {
     break;
   default:
     templateVars.message = 'You can only view details for URLs that you created.';
-    res.render('error', templateVars);
+    res.status(403).render('error', templateVars);
   }
 });
 
@@ -100,9 +104,13 @@ router.get('/url/edit/:id', (req, res) => {
   // Check to make sure the current user has access to the requested document in the database
   // (i.e. was the creator of this URL, or is admin)
   let document = urlDatabase[req.params.id];
+  if (!document) {
+    templateVars.message = 'This is an invalid shortURL ID';
+    res.status(404).render('error', templateVars);
+  }
   switch (req.session.userID) {
   case document.userID:
-  case 'daroot':
+  case adminID:
     Object.assign(templateVars, {
       shortURL: req.params.id,
       longURL: document.longURL,
@@ -112,7 +120,7 @@ router.get('/url/edit/:id', (req, res) => {
     break;
   default:
     templateVars.message = 'You can only update details for URLs that you created.';
-    res.render('error', templateVars);
+    res.status(403).render('error', templateVars);
   }
 });
 
@@ -121,15 +129,19 @@ router.post('/url/edit/:id', (req, res) => {
   // Check to make sure the current user has access to the requested document in the database
   // (i.e. was the creator of this URL, or is admin)
   let document = urlDatabase[req.params.id]; // This should be a pointer, so modifying 'document' modifies the actual document in the database
+  if (!document) {
+    templateVars.message = 'You tried to post to an invalid shortURL ID';
+    res.status(404).render('error', templateVars);
+  }
   switch (req.session.userID) {
   case document.userID:
-  case 'daroot':
+  case adminID:
     document.longURL = req.body.longURL;
     res.redirect(`/url/${req.params.id}`);
     break;
   default:
     templateVars.message = 'You can only update details for URLs that you created.';
-    res.render('error', templateVars);
+    res.status(403).render('error', templateVars);
   }
 });
 
@@ -139,21 +151,31 @@ router.post('/url/delete/:id', (req, res) => {
   // Check to make sure the current user has access to the requested document in the database
   // (i.e. was the creator of this URL, or is admin)
   let document = urlDatabase[req.params.id]; // This should be a pointer, so modifying 'document' modifies the actual document in the database
+  if (!document) {
+    templateVars.message = 'Sorry, cannot delete. In fact, this shortURL never existed.';
+    res.render('error', templateVars);
+  }
   switch (req.session.userID) {
   case document.userID:
-  case 'daroot':
+  case adminID:
     delete urlDatabase[req.params.id];
     res.redirect(`/urls`);
     break;
   default:
     templateVars.message = 'You can only delete URLs that you created.';
-    res.render('error', templateVars);
+    res.status(404).render('error', templateVars);
   }
 });
 
 // Redirect when a shortURL is entered
 router.get('/u/:id', (req, res) => {
-  res.redirect(urlDatabase[req.params.id].longURL);
+  try {
+    res.redirect(urlDatabase[req.params.id].longURL);
+  } catch (err) {
+    const templateVars = defaultTemplateVars();
+    templateVars.message = 'This is an invalid shortURL link';
+    res.status(404).render('error', templateVars)
+  }
   // Note: This only works if the http:// protocol is specified, otherwise it thinks it's a local file called google.ca!
 });
 

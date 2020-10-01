@@ -15,9 +15,11 @@
     <p>
       <a href="https://github.com/sherwin-kwan/tinyapp/issues">Report a bug?</a>
     </p>
-    <div <% if (userID)  { %> style="display: none" <% } %>>
+    <div> <% if (userID)  { %> 
+      <a class="btn btn-primary" href="/urls">Back to Home</a> <% }  else { %>
       <a class="btn btn-primary" href="/users/register">Register</a>
       <a class="btn btn-primary" href="/users/login">Sign In</a>
+      <% } %>
     </div>
   </main>
 </body>
