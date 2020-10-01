@@ -28,11 +28,11 @@
           <td><%= urlDatabase[url].longURL %></td>
           <td><%= urlDatabase[url].userID %></td>
           <td>
-            <a class="btn btn-primary" href="/url/edit/<%= url %>">Edit</a>
+            <a href="/url/edit/<%= url %>">Edit</a>
           </td>
           <td>
             <form method="POST" action="/url/delete/<%= url %>">
-              <input type="submit" class="btn btn-primary" value="Delete"></form>
+              <input type="submit" class="link-button" value="Delete"></form>
             </form>
           </td>
         </tr>

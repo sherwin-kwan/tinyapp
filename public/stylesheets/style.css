@@ -1,3 +1,55 @@
+/* Styles go here */
+
 body {
-  background-color: green;
+  font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+/* TABLES */
+
+table {
+  border-collapse: separate;
+  
+}
+
+.table th, .table td {
+  padding: 10px;
+  border-bottom: 2px solid black;
+  border-right: 2px solid black;
+  vertical-align: middle;
+  border-top: none;
+}
+
+th:first-child, td:first-child {
+  border-left: 2px solid black;
+}
+
+thead {
+  background: blue;
+  color: white;
+}
+
+/* Alternate row shading in tables */
+tbody tr:nth-child(even) {
+  background: #cccccc;
+}
+
+/* LAYOUT FOR TOP NAVBAR */
+
+.navbar-message {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  color: yellow;
+}
+
+.navbar-bold {
+  font-weight: bold;
+}
+
+.link-button {
+  appearance: none;
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+  vertical-align: middle;
+  color: #007bff;
 }

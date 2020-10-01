@@ -11,10 +11,13 @@
     <div class="card-header"></div>
     <div class="card-body">
       <h5 class="card-title">TinyURL for: <%= longURL %></h5>
-      <p class="card-text"><a href="/u/<%= shortURL %>">Short URL is <%= shortURL %></a></p>
+      <p class="card-text"><a href="/u/<%= shortURL %>">Short URL is <%= shortURL %></a>
+      </p>
+      <p>
+        <a href="/url/edit/<%= shortURL %>">Edit</a>
+      </p>
+      <div class="card-footer text-muted"></div>
     </div>
-    <div class="card-footer text-muted"></div>
-  </div>
 
 </body>
 <footer>
