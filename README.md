@@ -3,6 +3,7 @@
 * URL shortener, a simplified clone of (say) Bit.ly
 * This app is currently NOT connected to a database, all data is stored on the server and disappears when the server is closed. This is not production-grade software, so don't actually use it expecting those shortened URLs to be usable long-term!
 * The stack is: Node + Express + EJS
+* This is based on an assignment in the Lighthouse Labs web development course
 
 ## Deploying Notes
 
