@@ -5,8 +5,8 @@ const generateRandomString = () => {
   return Math.random().toString(36).slice(2, 8);
 };
 
-// Finds the id property of a user given an email
-const findUserByEmail = (email) => {
+// Finds the id property of a user given an email in a database
+const findUserByEmail = (email, db) => {
   for (let userID in users) {
     if (users[userID].email === email.trim()) {
       return userID;
