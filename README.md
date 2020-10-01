@@ -12,11 +12,11 @@
   * If you are planning to upload source code, remember to put the secret key file in *.gitignore* to avoid leaking secret keys onto the Internet
 * By default, this application runs on port 4001. If you wish to use a different port, change the constant *PORT* in *espress-server.js*
 
-## Known Issues
+## Purpose
 
-* Layout for many pages is subpar. This app was meant to practice Express and CRUD operations, CSS was not a priority.
-* I have also had trouble getting browsers to recognise the custom stylesheet placed in */public/style/style.css*
-* Password fields are not recognised as password fields in browsers
+* This app creates a shortened URL with a six-character string (e.g. */u/f5j78t*) which redirects to another URL
+* Once a shortened URL has been created, it's open to the public - anyone can use it and the redirection will work
+* However, only the creator of the shortened URL can edit or view the details of that URL
 
 ## Routes
 
