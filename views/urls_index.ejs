@@ -37,6 +37,11 @@
           </td>
         </tr>
         <% } %>
+        <% if (Object.keys(filtered).length === 0) { %>
+          <tr>
+            <td colspan="5">You have not created any short URLs.</td>
+          </tr>
+        <% } %>
       </tbody>
     </table>
     <a class="btn btn-primary" href="/urls/create">Create New Short URL!</a>
