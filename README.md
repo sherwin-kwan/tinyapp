@@ -11,6 +11,11 @@
 * Once a shortened URL has been created, it's open to the public - anyone can use it and the redirection will work
 * However, only the creator of the shortened URL can edit or view the details of that URL
 
+## Screenshots
+* [Home Page]('./docs/mainPage.png)
+* [Registration Page]('./docs/register.png)
+* [Error Page]('./docs/error.png)
+
 ## Release History
 
 Version | Release Date | Notes
