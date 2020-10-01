@@ -1,11 +1,3 @@
-/* Remaining issues
-
-1) CSS not working
-3) Hiding password text
-4) Following user stories
-
-*/
-
 const express = require('express');
 const app = express();
 const { PORT } = require('./constants');
