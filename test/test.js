@@ -1,4 +1,3 @@
-const { util } = require('chai');
 const chai = require('chai');
 const assert = chai.assert;
 const { generateRandomString, getUsersName, filterUrlDatabase, findUserByEmail } = require('../helperFunctions');

@@ -8,7 +8,7 @@
 
 const express = require('express');
 const app = express();
-const { PORT } = require('constants');
+const { PORT } = require('./constants');
 app.set('view engine', 'ejs');
 const router = require('./routes/router.js');
 const usersRouter = require('./routes/usersRouter.js');
