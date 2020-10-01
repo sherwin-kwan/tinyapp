@@ -1,5 +1,5 @@
 // NOTE: This is random stuff I wrote to tinker with how Express works. This code is not related to Tinyapp at all.
-
+// This legacy code will be removed in a future version of Tinyapp.
 
 // router.get('/hello-world.html', (req, res) => {
 //   res.send('<html><head><title>Hello world</title></head><body>Hello world</body></html>');
