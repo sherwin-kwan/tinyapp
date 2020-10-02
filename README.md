@@ -12,9 +12,9 @@
 * However, only the creator of the shortened URL can edit or view the details of that URL
 
 ## Screenshots
-* ![Home Page]('./docs/mainPage.png)
-* ![Registration Page]('./docs/register.png)
-* ![Error Page]('./docs/error.png)
+* ![Home Page](https://github.com/sherwin-kwan/tinyapp/docs/mainPage.png)
+* ![Registration Page](https://github.com/sherwin-kwan/tinyapp/docs/register.png)
+* ![Error Page](https://github.com/sherwin-kwan/tinyapp/docs/error.png)
 
 ## Release History
 
