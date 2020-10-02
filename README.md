@@ -13,8 +13,8 @@
 
 ## Screenshots
 * ![Home Page](https://github.com/sherwin-kwan/tinyapp/blob/master/docs/mainPage.png)
-* ![Registration Page](https://github.com/sherwin-kwan/tinyapp/blob/master/docs/register.png)
-* ![Error Page](https://github.com/sherwin-kwan/tinyapp/blob/master/docs/error.png)
+* [Registration Page](https://github.com/sherwin-kwan/tinyapp/blob/master/docs/register.png)
+* [Error Page](https://github.com/sherwin-kwan/tinyapp/blob/master/docs/error.png)
 
 ## Release History
 
