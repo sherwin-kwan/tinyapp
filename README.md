@@ -46,6 +46,7 @@ Version | Release Date | Notes
   * morgan
   * nodemon
 * Some users have reported issues with installing *bcrypt*. If you are experiencing this, type ```node -v``` to determine the version of Node installed on your system, and [find the corresponding version of bcrypt](https://www.npmjs.com/package/bcrypt) to install (```npm install bcrypt@VERSIONNUM```).
+* Once all dependencies have been installed, run the script: ```npm run start```. If that fails, then you may directly run the server with ```node express-server.js```
 
 
 ## Routes
