@@ -12,9 +12,13 @@
 * However, only the creator of the shortened URL can edit or view the details of that URL
 
 ## Screenshots
-* ![Home Page](https://github.com/sherwin-kwan/tinyapp/blob/master/docs/mainpage.png)
-* ![Registration Page](https://github.com/sherwin-kwan/tinyapp/blob/master/docs/register.png)
-* ![Error Page](https://github.com/sherwin-kwan/tinyapp/blob/master/docs/error.png)
+
+* Home Page
+![](https://github.com/sherwin-kwan/tinyapp/blob/master/docs/mainpage.png)
+* Registration Page
+![](https://github.com/sherwin-kwan/tinyapp/blob/master/docs/register.png) 
+* Error Page
+![](https://github.com/sherwin-kwan/tinyapp/blob/master/docs/error.png)
 
 ## Release History
 
@@ -26,10 +30,10 @@ Version | Release Date | Notes
 
 * Before attempting to compile and run Tinyapp, please set up a secret key:
   * create a file called *secret-key.js* in the root project directory
-  * assign a secret key of your own choice into a variable, and *module.exports* it
+  * assign a secret key of your own choice into a variable, and ```module.exports``` it
   * If you are planning to upload source code, remember to put the secret key file in *.gitignore* to avoid leaking secret keys onto the Internet
 * By default, this application runs on port **4001**. If you wish to use a different port, change the constant *PORT* in *constants.js*
-* Remember to download Node dependencies with *npm install*
+* Remember to download Node dependencies with ```npm install```
 * In case the *package.json* file is not working properly, this is a list of the dependencies for this project:
   * bcrypt
   * body-parser
@@ -41,6 +45,7 @@ Version | Release Date | Notes
 * Other dependencies you may find helpful:
   * morgan
   * nodemon
+* Some users have reported issues with installing *bcrypt*. If you are experiencing this, type ```node -v``` to determine the version of Node installed on your system, and [find the corresponding version of bcrypt](https://www.npmjs.com/package/bcrypt) to install (```npm install bcrypt@VERSIONNUM```).
 
 
 ## Routes
