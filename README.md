@@ -12,9 +12,9 @@
 * However, only the creator of the shortened URL can edit or view the details of that URL
 
 ## Screenshots
-* [Home Page]('./docs/mainPage.png)
-* [Registration Page]('./docs/register.png)
-* [Error Page]('./docs/error.png)
+* ![Home Page]('./docs/mainPage.png)
+* ![Registration Page]('./docs/register.png)
+* ![Error Page]('./docs/error.png)
 
 ## Release History
 
@@ -28,7 +28,7 @@ Version | Release Date | Notes
   * create a file called *secret-key.js* in the root project directory
   * assign a secret key of your own choice into a variable, and *module.exports* it
   * If you are planning to upload source code, remember to put the secret key file in *.gitignore* to avoid leaking secret keys onto the Internet
-* By default, this application runs on port 4001. If you wish to use a different port, change the constant *PORT* in *espress-server.js*
+* By default, this application runs on port **4001**. If you wish to use a different port, change the constant *PORT* in *constants.js*
 * Remember to download Node dependencies with *npm install*
 * In case the *package.json* file is not working properly, this is a list of the dependencies for this project:
   * bcrypt
