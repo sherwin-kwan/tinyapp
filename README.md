@@ -1,6 +1,6 @@
 # tinyapp
 
-* URL shortener, a simplified clone of Bit.ly. *(just saying that because it's the most well-known one, I have no affiliation with Bitly Inc. and am not a shill. I promise.)*
+* URL shortener, a simplified clone of Bit.ly.
 * This is not production-grade software (notably: it's not even connected to any database, the data is literally stored in a JS object that goes away when you stop the server)
 * The stack is: Node + Express + EJS
 * This is based on an assignment in the Lighthouse Labs web development course
