@@ -10,7 +10,7 @@ const { generateRandomString, findUserByEmail, defaultTemplateVars } = require('
 
 // Login GET route
 router.get('/login', (req, res) => {
-  let templateVars = defaultTemplateVars();
+  const templateVars = defaultTemplateVars();
   if (req.session.userID) {
     templateVars.message = 'You are already logged in. Return to <a href="/urls">homepage</a>?';
     res.status(400).render('error', templateVars);
@@ -48,7 +48,7 @@ router.post('/logout', (req, res) => {
 
 // User registration, with actual passwords:
 router.get('/register', (req, res) => {
-  let templateVars = defaultTemplateVars();
+  const templateVars = defaultTemplateVars();
   // Check if the user is already logged in (i.e. has a session ID)
   if (req.session.userID) {
     templateVars.message = 'You are already logged in. Return to <a href="/urls">homepage</a>?';
