@@ -24,10 +24,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Output request log to console
 morgan('tiny');
 
-// Set up cookies. 
+// Set up cookies.
 /*
 There should be a file called secret-key.js in the root directory, with the following two lines of code:
-const secretKey = <INSERT AN ALPHANUMERIC STRING HERE> 
+const secretKey = <INSERT AN ALPHANUMERIC STRING HERE>
 module.exports = secretKey; */
 app.use(cookieSession({
   name: 'session',

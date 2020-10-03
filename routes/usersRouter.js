@@ -26,12 +26,12 @@ router.post('/login', (req, res) => {
   const templateVars = defaultTemplateVars();
   // Two checks: 1) does the user exist? 2) does the user enter the correct password?
   if (!userID) {
-    templateVars.message = `Your email does not appear in our database. Perhaps you need to create an account?`;
+    templateVars.message = 'Your email does not appear in our database. Perhaps you need to create an account?';
     res.status(403).render('error', templateVars);
     return;
   }
   if (!bcrypt.compareSync(req.body.password, users[userID].password)) {
-    templateVars.message = `Sorry, email and password do not match. Please try again.`;
+    templateVars.message = 'Sorry, email and password do not match. Please try again.';
     res.status(403).render('error', templateVars);
     return;
   }
@@ -43,7 +43,7 @@ router.post('/login', (req, res) => {
 // And signing out
 router.post('/logout', (req, res) => {
   req.session = null; // Clears the session cookie
-  res.redirect('/urls');
+  res.redirect('/users/login');
 });
 
 // User registration, with actual passwords:
@@ -61,15 +61,16 @@ router.get('/register', (req, res) => {
 
 router.post('/register', (req, res) => {
   const seeIfUserExists = findUserByEmail(req.body.email, users);
+  const templateVars = defaultTemplateVars();
   // Handles the case where a user attempts to register with an email that already has an account
   if (seeIfUserExists) {
-    res.status(400).send(`<html>Welcome back, ${users[seeIfUserExists].name}, you actually already have an account. <a href="/users/login">Sign in</a></html>?`);
-    return;
+    templateVars.message = `Welcome back, ${users[seeIfUserExists].name}, you actually already have an account. <a href="/users/login">Sign in</a>?`;
+    res.status(400).render('error', templateVars);
   }
   // If email or password (required fields) aren't filled in. This should probably be done with client-side validation but we haven't learned it yet.
   if (!req.body.name || !req.body.email || !req.body.password) {
-    res.status(400).send('Name, email, and password are required');
-    return;
+    templateVars.message = 'Name, email, and password are required. <a href="/users/register">Try again?</a>';
+    res.status(400).render('error', templateVars);
   }
   let userID = '';
   // Generate a random user ID, and make sure to avoid duplicates (in case of the one-in-a-million chance it's already used)

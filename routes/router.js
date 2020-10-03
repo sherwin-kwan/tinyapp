@@ -6,7 +6,6 @@ const users = require('../data/usersDatabase.js');
 const { adminID } = require('../constants');
 // Import functions for POST requests
 const { generateRandomString, getUsersName, defaultTemplateVars, filterUrlDatabase } = require('../helperFunctions.js');
-const inspect = require('util').inspect;
 
 /// HOMEPAGE ///
 
@@ -55,7 +54,7 @@ router.post('/urls/create', (req, res) => {
 router.get('/urls', (req, res) => {
   // Check if user is already logged in
   const templateVars = defaultTemplateVars(req.session.userID);
-  if (req.session.ID) {
+  if (req.session.userID) {
     // This queries the database to only return those documents which the user has access to
     const filtered = filterUrlDatabase(req.session.userID, urlDatabase, adminID);
     // Inserts a name property into the filtered data (this would normally be done in other ways with real SQL)
@@ -131,7 +130,7 @@ router.post('/url/edit/:id', (req, res) => {
   }
   if (req.session.userID === document.userID || req.session.userID === adminID) {
     document.longURL = req.body.longURL;
-      res.redirect(`/url/${req.params.id}`);
+    res.redirect(`/url/${req.params.id}`);
   } else {
     templateVars.message = 'You do not have permission to view or edit this URL because you did not create it.';
     res.status(403).render('error', templateVars);
@@ -150,7 +149,7 @@ router.post('/url/delete/:id', (req, res) => {
   }
   if (req.session.userID === document.userID || req.session.userID === adminID) {
     delete urlDatabase[req.params.id];
-    res.redirect(`/urls`);
+    res.redirect('/urls');
   } else {
     templateVars.message = 'You can only delete URLs that you created.';
     res.status(404).render('error', templateVars);
