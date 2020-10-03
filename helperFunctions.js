@@ -9,12 +9,12 @@ const generateRandomString = () => {
 // If I was writing this properly, it would be connected to an actual database and I'd be able to use real queries instead of this
 // crappy hacked-together workaround.
 const filterUrlDatabase = (userID, db, adminID) => {
-  let output = new Object;
+  const output = new Object;
   if (userID === adminID) {
     // Admin accounts can read, edit, and delete everyone's URLs
     return db;
   }
-  for (let shortURL in db) {
+  for (const shortURL in db) {
     if (db[shortURL].userID === userID) {
       output[shortURL] = db[shortURL];
     }
@@ -24,7 +24,7 @@ const filterUrlDatabase = (userID, db, adminID) => {
 
 // Finds the id property of a user given an email in a database
 const findUserByEmail = (email, db) => {
-  for (let userID in db) {
+  for (const userID in db) {
     if (db[userID].email === email.trim()) {
       return userID;
     }
@@ -44,16 +44,12 @@ const getUsersName = (id, db) => {
 // If no req is passed, then the userID and username are set to null before passing to the EJS templates
 const defaultTemplateVars = (userID) => {
   const def = {
-    operation: 'Placeholder',
     userID: userID,
     userName: getUsersName(userID, users),
-    message: 'Placeholder'
   };
   const notLoggedIn = {
-    operation: 'Not logged in',
     userID: null,
     userName: null,
-    message: 'Placeholder'
   };
   return (userID) ? def : notLoggedIn;
 };

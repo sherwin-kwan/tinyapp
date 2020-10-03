@@ -10,7 +10,7 @@ const { generateRandomString, findUserByEmail, defaultTemplateVars } = require('
 
 // Login GET route
 router.get('/login', (req, res) => {
-  let templateVars = defaultTemplateVars();
+  const templateVars = defaultTemplateVars();
   if (req.session.userID) {
     templateVars.message = 'You are already logged in. Return to <a href="/urls">homepage</a>?';
     res.status(400).render('error', templateVars);
@@ -24,30 +24,32 @@ router.get('/login', (req, res) => {
 router.post('/login', (req, res) => {
   const userID = findUserByEmail(req.body.email, users);
   const templateVars = defaultTemplateVars();
+  // Two checks: 1) does the user exist? 2) does the user enter the correct password?
   if (!userID) {
-    templateVars.message = `This user doesn't exist. Nice try, hacker!`;
+    templateVars.message = 'Your email does not appear in our database. Perhaps you need to create an account?';
     res.status(403).render('error', templateVars);
     return;
   }
   if (!bcrypt.compareSync(req.body.password, users[userID].password)) {
-    templateVars.message = `You got the wrong password. Nice try, hacker!`;
+    templateVars.message = 'Sorry, email and password do not match. Please try again.';
     res.status(403).render('error', templateVars);
     return;
   }
+  // If email and password check out, log the user in and create a session cookie
   req.session.userID = userID;
-  console.log('Delicious cookie just came hot out of the oven!');
   res.redirect('/urls');
 });
 
 // And signing out
 router.post('/logout', (req, res) => {
   req.session = null; // Clears the session cookie
-  res.redirect('/urls');
+  res.redirect('/users/login');
 });
 
 // User registration, with actual passwords:
 router.get('/register', (req, res) => {
-  let templateVars = defaultTemplateVars();
+  const templateVars = defaultTemplateVars();
+  // Check if the user is already logged in (i.e. has a session ID)
   if (req.session.userID) {
     templateVars.message = 'You are already logged in. Return to <a href="/urls">homepage</a>?';
     res.status(400).render('error', templateVars);
@@ -59,21 +61,23 @@ router.get('/register', (req, res) => {
 
 router.post('/register', (req, res) => {
   const seeIfUserExists = findUserByEmail(req.body.email, users);
+  const templateVars = defaultTemplateVars();
   // Handles the case where a user attempts to register with an email that already has an account
   if (seeIfUserExists) {
-    res.status(400).send(`<html>Welcome back, ${users[seeIfUserExists].name}, you actually already have an account. <a href="/users/login">Sign in</a></html>?`);
-    return;
+    templateVars.message = `Welcome back, ${users[seeIfUserExists].name}, you actually already have an account. <a href="/users/login">Sign in</a>?`;
+    res.status(400).render('error', templateVars);
   }
-  // If email or password (required fields) aren't filled in.
+  // If email or password (required fields) aren't filled in. This should probably be done with client-side validation but we haven't learned it yet.
   if (!req.body.name || !req.body.email || !req.body.password) {
-    res.status(400).send('Name, email, and password are required');
-    return;
+    templateVars.message = 'Name, email, and password are required. <a href="/users/register">Try again?</a>';
+    res.status(400).render('error', templateVars);
   }
   let userID = '';
   // Generate a random user ID, and make sure to avoid duplicates (in case of the one-in-a-million chance it's already used)
   do {
     userID = generateRandomString();
   } while (Object.keys(users).includes(userID));
+  // Save the new user into database
   users[userID] = {
     name: req.body.name,
     email: req.body.email,

@@ -26,14 +26,18 @@ Version | Release Date | Notes
 ---|---|---
 1.0.0 | 2020-10-01 | [Notes](https://github.com/sherwin-kwan/tinyapp/blob/master/release-notes/1.0.0.md)
 
-## Deploying Notes
+## How to Run TinyApp
 
-* Before attempting to compile and run Tinyapp, please set up a secret key:
+* Before attempting to run Tinyapp, please set up a secret key:
   * create a file called *secret-key.js* in the root project directory
-  * assign a secret key of your own choice into a variable, and ```module.exports``` it
-  * If you are planning to upload source code, remember to put the secret key file in *.gitignore* to avoid leaking secret keys onto the Internet
-* By default, this application runs on port **4001**. If you wish to use a different port, change the constant *PORT* in *constants.js*
-* Remember to download Node dependencies with ```npm install```
+  * assign a secret key of your own choice into a variable, and export it. For example:
+  ```javascript
+  const secretKey = 'af2j389FjsDfk24rkhgd';
+  module.exports = secretKey;
+  ```
+  * If you are planning to upload the source code afterwards, remember to put the secret key file in *.gitignore* to avoid leaking secret keys onto the Internet
+* By default, this application runs on port 4001. If you wish to use a different port, change the constant *PORT* in *constant.js*
+* Remember to download Node dependencies with *npm install*
 * In case the *package.json* file is not working properly, this is a list of the dependencies for this project:
   * bcrypt
   * body-parser
@@ -48,12 +52,11 @@ Version | Release Date | Notes
 * Some users have reported issues with installing *bcrypt*. If you are experiencing this, type ```node -v``` to determine the version of Node installed on your system, and [find the corresponding version of bcrypt](https://www.npmjs.com/package/bcrypt) to install (```npm install bcrypt@VERSIONNUM```).
 * Once all dependencies have been installed, run the script: ```npm run start```. If that fails, then you may directly run the server with ```node express-server.js```
 
-
 ## Routes
 
 Method|URL|Operation
 ---|---|---
-GET | / | Redirects to /urls
+GET | / | Redirects to /urls if logged in, or /users/login if not
 GET | /urls/create | Retrieve form to create a new short URL 
 POST | /urls/create | Submit form to create a new short URL 
 GET | /urls | Browse through all short URLs
@@ -70,4 +73,4 @@ POST | /users/logout | Log out
 
 ## Copyright Notice
 
-This is [open-source software](https://github.com/sherwin-kwan/tinyapp/blob/master/LICENSE), which means you can't be sued for copying this code and using it in your own apps. I just wouldn't recommend it though, I made this in a few days and it's not exactly made to best practices. NO WARRANTY, PROVIDED AS-IS, you know the drill ...
+This was created by Sherwin Kwan as part of a Lighthouse Labs assignment. This is available as-is, with no warranty, etc. you know the drill. [License here](https://github.com/sherwin-kwan/tinyapp/blob/master/LICENSE)
