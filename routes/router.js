@@ -52,7 +52,7 @@ router.get('/urls', (req, res) => {
   let templateVars = defaultTemplateVars(req.session.userID);
   const filtered = filterUrlDatabase(req.session.userID, urlDatabase, adminID);
   // Inserts a name property into the filtered data (this would normally be done in other ways with real SQL)
-  for (let shortURL in filtered) {
+  for (const shortURL in filtered) {
     filtered[shortURL].userName = getUsersName(filtered[shortURL].userID, users);
   }
   templateVars.filtered = filtered;
@@ -76,7 +76,7 @@ router.get('/url/:id', (req, res) => {
   let templateVars = defaultTemplateVars(req.session.userID);
   // Check to make sure the current user has access to the requested document in the database
   // (i.e. was the creator of this URL, or is admin)
-  let document = urlDatabase[req.params.id];
+  const document = urlDatabase[req.params.id];
   if (!document) {
     templateVars.message = 'This is an invalid shortURL ID';
     res.status(404).render('error', templateVars);
@@ -102,7 +102,7 @@ router.get('/url/edit/:id', (req, res) => {
   let templateVars = defaultTemplateVars(req.session.userID);
   // Check to make sure the current user has access to the requested document in the database
   // (i.e. was the creator of this URL, or is admin)
-  let document = urlDatabase[req.params.id];
+  const document = urlDatabase[req.params.id];
   if (!document) {
     templateVars.message = 'This is an invalid shortURL ID';
     res.status(404).render('error', templateVars);
@@ -127,7 +127,7 @@ router.post('/url/edit/:id', (req, res) => {
   let templateVars = defaultTemplateVars(req.session.userID);
   // Check to make sure the current user has access to the requested document in the database
   // (i.e. was the creator of this URL, or is admin)
-  let document = urlDatabase[req.params.id]; // This should be a pointer, so modifying 'document' modifies the actual document in the database
+  const document = urlDatabase[req.params.id]; // This should be a pointer, so modifying 'document' modifies the actual document in the database
   if (!document) {
     templateVars.message = 'You tried to post to an invalid shortURL ID';
     res.status(404).render('error', templateVars);
@@ -149,7 +149,7 @@ router.post('/url/delete/:id', (req, res) => {
   let templateVars = defaultTemplateVars(req.session.userID);
   // Check to make sure the current user has access to the requested document in the database
   // (i.e. was the creator of this URL, or is admin)
-  let document = urlDatabase[req.params.id]; // This should be a pointer, so modifying 'document' modifies the actual document in the database
+  const document = urlDatabase[req.params.id]; // This should be a pointer, so modifying 'document' modifies the actual document in the database
   if (!document) {
     templateVars.message = 'Sorry, cannot delete. In fact, this shortURL never existed.';
     res.render('error', templateVars);

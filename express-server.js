@@ -24,14 +24,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Output request log to console
 morgan('tiny');
 
-// Cookies are delicious delicacies  https://www.squarefree.com/extensions/delicious-delicacies/delicious-1.5.png
+// Set up cookies. 
+/*
+There should be a file called secret-key.js in the root directory, with the following two lines of code:
+const secretKey = <INSERT AN ALPHANUMERIC STRING HERE> 
+module.exports = secretKey; */
 app.use(cookieSession({
   name: 'session',
   keys: [mySecretKey],
   maxAge: 3600000 // expires after 1 hour
 }));
 
-// Routes
+// Routes. Login and registration-related routes are placed into /routes/userRouter.js, everything else in /routes/router.js
 app.use('/users/', usersRouter);
 app.use(router);
 
