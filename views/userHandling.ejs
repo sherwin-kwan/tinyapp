@@ -1,3 +1,5 @@
+<!-- Template for the login and registration pages -->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,9 +11,13 @@
   <%- include('./partials/_header.ejs'); %>
   <main>
     <h1>Tinyapp - <%= operation %></h1>
+    <!-- Password warning message only displays on the register page -->
+    <% if (operation === 'Register') { %>
     <p id="passwordWarning">Warning, avoid using any passwords you use on other sites. 
       This is a student project and I cannot guarantee you that this site is secure!
     </p>
+    <% } %>
+    <!-- A convenient link for users to go between login and register pages -->
     <p id="switchFormat">
       <%- (operation === 'Register') ? 'Already have an account? <a href="/users/login">Sign In!</a>' : `Don't have an account yet? <a href="/users/register">Register today!</a>` %>
     </p>
