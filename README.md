@@ -26,9 +26,13 @@ Version | Release Date | Notes
 
 * Before attempting to compile and run Tinyapp, please set up a secret key:
   * create a file called *secret-key.js* in the root project directory
-  * assign a secret key of your own choice into a variable, and *module.exports* it
-  * If you are planning to upload source code, remember to put the secret key file in *.gitignore* to avoid leaking secret keys onto the Internet
-* By default, this application runs on port 4001. If you wish to use a different port, change the constant *PORT* in *espress-server.js*
+  * assign a secret key of your own choice into a variable, and export it. For example:
+  ```javascript
+  const secretKey = 'af2j389FjsDfk24rkhgd';
+  module.exports = secretKey;
+  ```
+  * If you are planning to upload the source code afterwards, remember to put the secret key file in *.gitignore* to avoid leaking secret keys onto the Internet
+* By default, this application runs on port 4001. If you wish to use a different port, change the constant *PORT* in *constant.js*
 * Remember to download Node dependencies with *npm install*
 * In case the *package.json* file is not working properly, this is a list of the dependencies for this project:
   * bcrypt
