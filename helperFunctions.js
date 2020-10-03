@@ -44,16 +44,12 @@ const getUsersName = (id, db) => {
 // If no req is passed, then the userID and username are set to null before passing to the EJS templates
 const defaultTemplateVars = (userID) => {
   const def = {
-    operation: 'Placeholder',
     userID: userID,
     userName: getUsersName(userID, users),
-    message: 'Placeholder'
   };
   const notLoggedIn = {
-    operation: 'Not logged in',
     userID: null,
     userName: null,
-    message: 'Placeholder'
   };
   return (userID) ? def : notLoggedIn;
 };

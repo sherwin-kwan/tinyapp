@@ -8,9 +8,9 @@
 <body>
   <%- include('./partials/_header.ejs'); %>
   <main>
-    <h1>So you wanna <%= (operation === 'Register') ? 'register a new account' : 'log in'; %>, eh?</h1>
-    <h5>You've come to the right place.</h5>
-    <p id="passwordWarning">Warning, you might not want to use any passwords you use on other sites. I cannot guarantee you that this site is secure!
+    <h1>Tinyapp - <%= operation %></h1>
+    <p id="passwordWarning">Warning, avoid using any passwords you use on other sites. 
+      This is a student project and I cannot guarantee you that this site is secure!
     </p>
     <p id="switchFormat">
       <%- (operation === 'Register') ? 'Already have an account? <a href="/users/login">Sign In!</a>' : `Don't have an account yet? <a href="/users/register">Register today!</a>` %>

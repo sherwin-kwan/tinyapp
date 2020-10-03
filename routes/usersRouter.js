@@ -24,18 +24,19 @@ router.get('/login', (req, res) => {
 router.post('/login', (req, res) => {
   const userID = findUserByEmail(req.body.email, users);
   const templateVars = defaultTemplateVars();
+  // Two checks: 1) does the user exist? 2) does the user enter the correct password?
   if (!userID) {
-    templateVars.message = `This user doesn't exist. Nice try, hacker!`;
+    templateVars.message = `Your email does not appear in our database. Perhaps you need to create an account?`;
     res.status(403).render('error', templateVars);
     return;
   }
   if (!bcrypt.compareSync(req.body.password, users[userID].password)) {
-    templateVars.message = `You got the wrong password. Nice try, hacker!`;
+    templateVars.message = `Sorry, email and password do not match. Please try again.`;
     res.status(403).render('error', templateVars);
     return;
   }
+  // If email and password check out, log the user in and create a session cookie
   req.session.userID = userID;
-  console.log('Delicious cookie just came hot out of the oven!');
   res.redirect('/urls');
 });
 
@@ -48,6 +49,7 @@ router.post('/logout', (req, res) => {
 // User registration, with actual passwords:
 router.get('/register', (req, res) => {
   let templateVars = defaultTemplateVars();
+  // Check if the user is already logged in (i.e. has a session ID)
   if (req.session.userID) {
     templateVars.message = 'You are already logged in. Return to <a href="/urls">homepage</a>?';
     res.status(400).render('error', templateVars);
@@ -64,7 +66,7 @@ router.post('/register', (req, res) => {
     res.status(400).send(`<html>Welcome back, ${users[seeIfUserExists].name}, you actually already have an account. <a href="/users/login">Sign in</a></html>?`);
     return;
   }
-  // If email or password (required fields) aren't filled in.
+  // If email or password (required fields) aren't filled in. This should probably be done with client-side validation but we haven't learned it yet.
   if (!req.body.name || !req.body.email || !req.body.password) {
     res.status(400).send('Name, email, and password are required');
     return;
@@ -74,6 +76,7 @@ router.post('/register', (req, res) => {
   do {
     userID = generateRandomString();
   } while (Object.keys(users).includes(userID));
+  // Save the new user into database
   users[userID] = {
     name: req.body.name,
     email: req.body.email,
