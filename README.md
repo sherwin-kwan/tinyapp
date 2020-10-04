@@ -25,6 +25,7 @@
 Version | Release Date | Notes
 ---|---|---
 1.0.0 | 2020-10-01 | [Notes](https://github.com/sherwin-kwan/tinyapp/blob/master/release-notes/1.0.0.md)
+1.0.1 | 2020-10-03 | [Notes](https://github.com/sherwin-kwan/tinyapp/blob/master/release-notes/1.0.1.md)
 
 ## How to Run TinyApp
 
